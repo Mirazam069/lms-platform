@@ -1,7 +1,15 @@
+// Dashboard.jsx
 import React from "react";
 import "./Dashboard.css";
-import { FaBook, FaUsers, FaChalkboardTeacher, FaCubes, FaLayerGroup, FaListUl } from "react-icons/fa";
-import { useTranslation } from "../../context/TranslationContext"; // 🔄 tarjima konteksti
+import {
+  FaBook,
+  FaUsers,
+  FaChalkboardTeacher,
+  FaCubes,
+  FaLayerGroup,
+  FaListUl,
+} from "react-icons/fa";
+import { useTranslation } from "../../context/TranslationContext";
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -11,48 +19,12 @@ const Dashboard = () => {
       <h1 className="dashboard-title">{t("dashboard")}</h1>
 
       <div className="stats-grid">
-        <div className="stat-card">
-          <FaBook className="stat-icon" />
-          <div>
-            <p className="stat-label">{t("courses")}</p>
-            <h3>12 ta</h3>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FaUsers className="stat-icon" />
-          <div>
-            <p className="stat-label">{t("students")}</p>
-            <h3>245 nafar</h3>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FaChalkboardTeacher className="stat-icon" />
-          <div>
-            <p className="stat-label">{t("teachers")}</p>
-            <h3>14 nafar</h3>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FaCubes className="stat-icon" />
-          <div>
-            <p className="stat-label">{t("modules")}</p>
-            <h3>48 ta</h3>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FaLayerGroup className="stat-icon" />
-          <div>
-            <p className="stat-label">{t("groups")}</p>
-            <h3>6 ta</h3>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FaListUl className="stat-icon" />
-          <div>
-            <p className="stat-label">{t("topics")}</p>
-            <h3>76 ta</h3>
-          </div>
-        </div>
+        <StatCard icon={<FaBook />} label={t("courses")} value="12 ta" />
+        <StatCard icon={<FaUsers />} label={t("students")} value="245 nafar" />
+        <StatCard icon={<FaChalkboardTeacher />} label={t("teachers")} value="14 nafar" />
+        <StatCard icon={<FaCubes />} label={t("modules")} value="48 ta" />
+        <StatCard icon={<FaLayerGroup />} label={t("groups")} value="6 ta" />
+        <StatCard icon={<FaListUl />} label={t("topics")} value="76 ta" />
       </div>
 
       <div className="recent-students">
@@ -87,5 +59,15 @@ const Dashboard = () => {
     </div>
   );
 };
+
+const StatCard = ({ icon, label, value }) => (
+  <div className="stat-card">
+    <div className="stat-icon">{icon}</div>
+    <div>
+      <p className="stat-label">{label}</p>
+      <h3>{value}</h3>
+    </div>
+  </div>
+);
 
 export default Dashboard;
