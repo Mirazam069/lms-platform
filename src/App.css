@@ -1,0 +1,16 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap&subset=cyrillic'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap&subset=cyrillic'); */
+@import url('https://fonts.googleapis.com/css2?family=Manrope&display=swap&subset=cyrillic');
+/* @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap&subset=cyrillic'); */
+
+
+:root {
+  --primary-color: #d0021b;
+  --primary-dark: #730014;
+  --text-white: #fff;
+  --text-light: #f8f8f8;
+  --border-color: #ddd;
+  --shadow-black: rgba(0, 0, 0, 0.2);
+  --primary-focus: rgba(208, 2, 27, 0.15);
+  --primary-hover-shadow: rgba(208, 2, 27, 0.4);
+}

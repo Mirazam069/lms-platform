@@ -1,0 +1,43 @@
+/* src/pages/student/StudentModules.css */
+.student-modules-container {
+  padding-top: 30px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--primary-dark);
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.module-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  transition: all 0.3s ease-in-out;
+  border: 1px solid var(--border-color);
+}
+
+.module-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+}
+
+.module-card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.module-card p {
+  font-size: 14px;
+  color: #555;
+}

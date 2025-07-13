@@ -1,0 +1,81 @@
+:root {
+  --primary-color: #d0021b;
+  --primary-dark: #730014;
+  --bg: #ffffff;
+  --text-color: #1f2937;
+  --border: #e5e7eb;
+}
+
+.modules-table-wrapper {
+  margin: 70px 50px 0 300px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color);
+}
+
+.modules-heading {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.modules-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modules-table thead {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.modules-table th,
+.modules-table td {
+  text-align: left;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+
+.modules-table tbody tr:hover {
+  background: #fef2f2; /* Soft red hover */
+}
+
+.modules-table td:first-child {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+
+.add-module-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.add-module-form input {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  flex: 1 1 200px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.add-module-form button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-module-form button:hover {
+  background-color: var(--primary-dark);
+}

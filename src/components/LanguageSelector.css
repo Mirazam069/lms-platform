@@ -1,0 +1,67 @@
+.lang-dropdown {
+  position: relative;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.lang-btn {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #374151;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+  border-color: #e02424;
+  color: #e02424;
+  box-shadow: 0 8px 24px rgba(224, 36, 36, 0.2);
+}
+
+.dropdown-icon {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+.lang-options {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  width: max-content;
+  min-width: 150px;
+  z-index: 100;
+  animation: fadeIn 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.lang-option {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.lang-option:hover {
+  background: #fef2f2;
+  color: #e02424;
+}
+
+.lang-option.active {
+  font-weight: 600;
+  color: #e02424;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,70 @@
+.teacher-home {
+  /* margin: 70px 50px 0 300px; */
+  padding-top: 30px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--primary-dark);
+}
+
+.teacher-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.teacher-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.teacher-card {
+  background: var(--text-white);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px var(--shadow-black);
+  transition: all 0.2s ease-in-out;
+}
+
+.teacher-card:hover {
+  box-shadow: 0 6px 18px var(--primary-hover-shadow);
+  transform: translateY(-3px);
+}
+
+.teacher-icon {
+  font-size: 24px;
+  color: var(--primary-color);
+}
+
+.teacher-label {
+  font-size: 15px;
+  margin-bottom: 5px;
+  color: var(--primary-dark);
+}
+
+.teacher-card h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.teacher-welcome {
+  background-color: var(--text-white);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-black);
+}
+
+.teacher-welcome h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.teacher-welcome p {
+  font-size: 15px;
+  color: var(--primary-dark);
+}

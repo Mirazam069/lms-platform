@@ -1,0 +1,299 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.navbar {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 2rem;
+  height: 64px;
+  background: #ffffff;
+  box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+
+}
+
+.navbar__left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__logo {
+  height: 45px;
+  margin-right: 1rem;
+  animation: fadeInDown 0.5s ease-out both;
+  /* image-rendering: crisp-edges; */
+}
+
+.navbar__brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  position: relative;
+}
+
+.navbar__brand::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: #e02424;
+  transition: width 0.3s ease;
+}
+
+.navbar__brand:hover::after {
+  width: 100%;
+}
+
+.navbar__center {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar__icon-wrapper {
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+  animation: fadeInDown 0.5s ease-out both;
+}
+
+.navbar__icon-wrapper:hover {
+  color: #e02424;
+  transform: translateY(-3px);
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar__lang {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+  animation: fadeInDown 0.5s ease-out both;
+}
+
+.navbar__lang:hover {
+  color: #e02424;
+  transform: translateY(-3px);
+}
+
+.navbar__user {
+  font-size: 18px;
+  color: #374151;
+  font-weight: 500;
+  animation: fadeInDown 0.5s ease-out both;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+.logout-icon {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.logout-icon:hover {
+  color: #e02424;
+  transform: scale(1.1);
+}
+
+.logout-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.logout-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeInDown 0.4s ease-out both;
+}
+
+.logout-modal-content h3 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #111827;
+}
+
+.logout-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.confirm-btn {
+  padding: 10px 20px;
+  background: #e02424;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.confirm-btn:hover {
+  background: #c81e1e;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+
+/* Til tanlash select */
+.navbar__lang {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d3dbe8;
+  font-size: 14px;
+  background: #fff;
+  color: #374151;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.navbar__lang:hover {
+  border-color: #e02424;
+  color: #e02424;
+  box-shadow: 0 4px 12px rgba(224, 36, 36, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Modal oynasi */
+.logout-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.logout-modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.4s ease;
+}
+
+.logout-modal-content h3 {
+  margin-bottom: 1.5rem;
+  font-size: 18px;
+  color: #1f2937;
+}
+
+.logout-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.confirm-btn,
+.cancel-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirm-btn {
+  background-color: #e02424;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #c71c1c;
+}
+
+.cancel-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.cancel-btn:hover {
+  background-color: #e5e7eb;
+}
+
+/* Animatsiyalar */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
