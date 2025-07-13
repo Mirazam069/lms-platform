@@ -1,5 +1,5 @@
 // src/api/courseService.js
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "./AxiosInstance";
 
 export const getCourses = async () => {
   const response = await axiosInstance.get("/director/courses/");
