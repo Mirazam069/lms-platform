@@ -105,72 +105,89 @@
 }
 
 
-/* === O'ngdan chiqadigan tahrirlash paneli === */
+/* Panelni qo‘shish uchun pastga kiritiladi */
+
 .edit-panel {
   position: fixed;
   top: 0;
-  right: -100%;
-  width: 400px;
-  height: 100%;
-  background-color: #ffffff;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
-  transition: right 0.3s ease;
-  z-index: 1001;
-  padding: 30px;
+  right: 0;
+  width: 350px;
+  height: 100vh;
+  background-color: #fff;
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  z-index: 2000;
+  animation: slideIn 0.7s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.edit-header h2 {
+  font-size: 20px;
+  color: var(--primary-dark);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--primary-dark);
+}
+
+.edit-form {
   display: flex;
   flex-direction: column;
+  gap: 14px;
 }
 
-.edit-panel.open {
-  right: 0;
-}
-
-.edit-panel h2 {
-  margin-bottom: 20px;
-  color: var(--primary-dark);
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.edit-panel input {
-  padding: 10px 14px;
-  margin-bottom: 15px;
+.edit-form input {
+  padding: 10px;
+  font-size: 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  font-size: 14px;
-  font-family: 'Poppins', sans-serif;
 }
 
-.edit-panel button {
+.edit-form button {
+  padding: 10px;
   background-color: var(--primary-color);
   color: white;
-  padding: 10px 16px;
   border: none;
   border-radius: var(--radius);
-  font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-family: 'Poppins', sans-serif;
-  margin-top: 10px;
 }
 
-.edit-panel button:hover {
+.edit-form button:hover {
   background-color: var(--primary-dark);
 }
 
-.edit-panel .close-btn {
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  font-size: 20px;
-  background: none;
-  border: none;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.2s;
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
-.edit-panel .close-btn:hover {
-  color: #000;
+.edit-panel.closing {
+  animation: slideOut 2s ease forwards;
 }
-
