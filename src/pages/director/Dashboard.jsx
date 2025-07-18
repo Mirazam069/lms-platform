@@ -19,7 +19,7 @@ const Dashboard = () => {
       <h1 className="dashboard-title">{t("dashboard")}</h1>
 
       <div className="stats-grid">
-        <StatCard icon={<FaBook />} label={t("courses")} value="12 ta" />
+        <StatCard icon={<FaBook />} label={t("courses")} value="13 ta" />
         <StatCard icon={<FaUsers />} label={t("students")} value="245 nafar" />
         <StatCard icon={<FaChalkboardTeacher />} label={t("teachers")} value="14 nafar" />
         <StatCard icon={<FaCubes />} label={t("modules")} value="48 ta" />

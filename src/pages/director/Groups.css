@@ -103,3 +103,74 @@
 .action-btn:hover {
   transform: scale(1.1);
 }
+
+
+/* === O'ngdan chiqadigan tahrirlash paneli === */
+.edit-panel {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 400px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
+  transition: right 0.3s ease;
+  z-index: 1001;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-panel.open {
+  right: 0;
+}
+
+.edit-panel h2 {
+  margin-bottom: 20px;
+  color: var(--primary-dark);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.edit-panel input {
+  padding: 10px 14px;
+  margin-bottom: 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.edit-panel button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 10px;
+}
+
+.edit-panel button:hover {
+  background-color: var(--primary-dark);
+}
+
+.edit-panel .close-btn {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.edit-panel .close-btn:hover {
+  color: #000;
+}
+
