@@ -1,0 +1,150 @@
+.active-leads-layout {
+  display: flex;
+}
+
+.content {
+  width: 100%;
+  margin: 70px 50px 0 300px;
+}
+
+.lead-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.lead-form input,
+.lead-form button {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.lead-form ::placeholder{
+    font-family: 'Poppins', sans-serif;
+}
+.lead-form button {
+  background-color: #d0021b;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.lead-form button:hover {
+  background-color: #a10116;
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.column {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 15px;
+  width: 24%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.column h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.column li {
+  font-size: 13px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f9f9f9;
+  border: 1px solid #eaeaea;
+}
+
+
+.lead-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lead-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.lead-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.lead-card strong {
+  font-size: 15px;
+  color: #111827;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.lead-card-info {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.lead-card-buttons {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lead-card-buttons button {
+  padding: 6px 10px;
+  font-size: 11px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Rangli tugmalar */
+.lead-card-buttons button:hover {
+  opacity: 0.9;
+}
+
+.lead-card-buttons .to-lead {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+.lead-card-buttons .to-expectation {
+  background-color: #fef08a;
+  color: #92400e;
+}
+
+.lead-card-buttons .to-rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.lead-card-buttons .to-joined {
+  background-color: #d1fae5;
+  color: #065f46;
+}

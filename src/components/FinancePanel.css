@@ -1,0 +1,76 @@
+.finance-panel {
+  position: fixed;
+  top: 65px;
+  left: 240px;
+  width: 230px;
+  height: calc(100vh - 70px);
+  background-color: #fff;
+  border-left: 1px solid #eee;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  z-index: 999;
+
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.finance-panel.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.finance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.finance-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #d0021b;
+}
+
+/* Linklar */
+.finance-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 8px;
+  border-radius: 6px;
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.finance-link:hover {
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+/* Icon har doim shu rangda bo‘lsin */
+.finance-icon {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #d0021b;
+  transition: none;
+}
+
+.finance-link:hover .finance-icon {
+  color: #d0021b; /* Hover paytida ham o‘zgarmasin */
+}

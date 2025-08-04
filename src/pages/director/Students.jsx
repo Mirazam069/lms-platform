@@ -1,63 +1,66 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Students.css";
-import { FaUserGraduate } from "react-icons/fa";
+
+const dummyStudents = [
+  { id: 1, name: "Aliyev Anvar", phone: "+998991112233", group: "Frontend", teacher: "Bekzod", balance: "200 000", comment: "Aktiv" },
+  { id: 2, name: "Xasanova Laylo", phone: "+998990001122", group: "Backend", teacher: "Dilshod", balance: "0", comment: "To‘lov to‘lanmagan" },
+  { id: 3, name: "Abdullaev Karim", phone: "+998971234567", group: "UI/UX", teacher: "Kamola", balance: "100 000", comment: "-" },
+  { id: 4, name: "Ravshanov Murod", phone: "+998933456789", group: "React", teacher: "Odil", balance: "300 000", comment: "Qarzdor emas" },
+  { id: 5, name: "Madina Islomova", phone: "+998901234567", group: "SMM", teacher: "Sardor", balance: "150 000", comment: "Bitirgan" },
+  { id: 6, name: "Ergashev Ilyos", phone: "+998935432100", group: "Node.js", teacher: "Sarvar", balance: "0", comment: "Tushunmovchilik bo‘lgan" },
+  { id: 7, name: "Gulbahor Normurodova", phone: "+998973210987", group: "Dizayn", teacher: "Firdavs", balance: "80 000", comment: "Kechikkan" },
+  { id: 8, name: "Rustamov Jaxongir", phone: "+998909998877", group: "Python", teacher: "Nodir", balance: "0", comment: "Qayta yozilgan" },
+  { id: 9, name: "Xusanov Bunyod", phone: "+998939191919", group: "PHP", teacher: "Diyor", balance: "50 000", comment: "-" },
+  { id: 10, name: "Zuxra G‘ulomova", phone: "+998903334455", group: "Java", teacher: "Madina", balance: "270 000", comment: "Aktiv" },
+  { id: 11, name: "Diyorbek Yusupov", phone: "+998909999000", group: "React", teacher: "Sarvar", balance: "0", comment: "Bitirgan" },
+  { id: 12, name: "Shahnoza Erkinova", phone: "+998917171717", group: "Marketing", teacher: "Kamola", balance: "0", comment: "Yangi" },
+];
 
 const Students = () => {
-  const [students, setStudents] = useState([
-    { id: 1, name: "Islom Karimov", course: "Frontend", date: "2025-06-20" },
-    { id: 2, name: "Maftuna Xasanova", course: "Backend", date: "2025-06-21" },
-    { id: 3, name: "Behruz Rajabov", course: "English", date: "2025-06-22" },
-  ]);
-
-  const [newStudent, setNewStudent] = useState({ name: "", course: "", date: "" });
-
-  const handleAddStudent = (e) => {
-    e.preventDefault();
-    const id = students.length + 1;
-    setStudents([...students, { id, ...newStudent }]);
-    setNewStudent({ name: "", course: "", date: "" });
-  };
-
   return (
-    <div className="students-container">
-      <h1 className="students-title">Talabalar</h1>
-
-      <form className="add-student-form" onSubmit={handleAddStudent}>
-        <input
-          type="text"
-          placeholder="Ism Familiya"
-          value={newStudent.name}
-          onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Kurs nomi"
-          value={newStudent.course}
-          onChange={(e) => setNewStudent({ ...newStudent, course: e.target.value })}
-          required
-        />
-        <input
-          type="date"
-          value={newStudent.date}
-          onChange={(e) => setNewStudent({ ...newStudent, date: e.target.value })}
-          required
-        />
-        <button type="submit">+ Qo'shish</button>
-      </form>
-
-      <div className="students-grid">
-        {students.map((student) => (
-          <div key={student.id} className="student-card">
-            <FaUserGraduate className="student-icon" />
-            <div>
-              <p className="student-name">{student.name}</p>
-              <p><strong>Kurs:</strong> {student.course}</p>
-              <p><strong>Qo‘shilgan sana:</strong> {student.date}</p>
-            </div>
-          </div>
-        ))}
+    <div className="content">
+      <div className="students-header">
+        <h2>Talabalar</h2>
+        <button className="add-btn">Yangi qo‘shish</button>
       </div>
+
+      <div className="filters">
+        <input type="text" placeholder="Ism yoki telefon orqali qidirish" />
+        <select><option>Kurslar</option></select>
+        <select><option>Talaba holati</option></select>
+        <select><option>Moliyaviy holati</option></select>
+        <select><option>Teglar bo‘yicha</option></select>
+        <input type="text" placeholder="Qo‘shimcha ID" />
+        <input type="date" placeholder="Boshlanish sanasi" />
+        <input type="date" placeholder="Tugash sanasi" />
+      </div>
+
+      <table className="students-table">
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Ism</th>
+            <th>Telefon</th>
+            <th>Guruh</th>
+            <th>O‘qituvchi</th>
+            <th>Balans</th>
+            <th>Izoh</th>
+          </tr>
+        </thead>
+        <tbody>
+          {dummyStudents.map((s) => (
+            <tr key={s.id}>
+              <td><div className="avatar">{s.name.charAt(0)}</div></td>
+              <td>{s.name}</td>
+              <td>{s.phone}</td>
+              <td>{s.group}</td>
+              <td>{s.teacher}</td>
+              <td>{s.balance}</td>
+              <td>{s.comment}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
