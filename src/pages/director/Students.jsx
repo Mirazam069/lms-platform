@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import React, { useState } from "react";
 import "./Students.css";
 
 const dummyStudents = [
@@ -17,11 +18,30 @@ const dummyStudents = [
 ];
 
 const Students = () => {
+  const [showToast, setShowToast] = useState(false);
+
+  const handleAddStudent = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 4000);
+  };
+
   return (
-    <div className="content">
+    <div className="content-students">
+      {showToast && (
+        <div className="custom-toast">
+          <div className="toast-icon">✔</div>
+          <div className="toast-content">
+            <strong>Muvaffaqiyatli</strong>
+            <p>Qo‘shish muvaffaqiyatli yakunlandi!</p>
+            <a href="/profile">Profilga o‘ting</a>
+          </div>
+          <div className="toast-close" onClick={() => setShowToast(false)}>×</div>
+        </div>
+      )}
+
       <div className="students-header">
         <h2>Talabalar</h2>
-        <button className="add-btn">Yangi qo‘shish</button>
+        <button className="add-btn" onClick={handleAddStudent}>Yangi qo‘shish</button>
       </div>
 
       <div className="filters">
@@ -64,5 +84,6 @@ const Students = () => {
     </div>
   );
 };
+
 
 export default Students;

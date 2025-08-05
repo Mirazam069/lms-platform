@@ -1,4 +1,4 @@
-.content {
+.content-students {
   margin: 70px 50px 0 300px;
   font-family: 'Poppins', sans-serif;
   font-size: 12px;
@@ -61,4 +61,65 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.custom-toast {
+  position: fixed;
+  top: 80px;
+  right: 30px;
+  background-color: white;
+  border-left: 5px solid #2ecc71;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 8px;
+  z-index: 9999;
+  animation: slideIn 0.4s ease;
+  font-family: 'Poppins', sans-serif;
+  width: 320px;
+}
+
+.toast-icon {
+  font-size: 20px;
+  color: #2ecc71;
+  margin-right: 15px;
+}
+
+.toast-content p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+
+.toast-content a {
+  font-size: 13px;
+  color: #0984e3;
+  text-decoration: none;
+}
+
+.toast-content a:hover {
+  text-decoration: underline;
+}
+
+.toast-close {
+  margin-left: auto;
+  font-size: 16px;
+  cursor: pointer;
+  color: #aaa;
+  padding-left: 10px;
+}
+
+.toast-close:hover {
+  color: #d0021b;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
