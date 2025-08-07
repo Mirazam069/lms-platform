@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Login.css";
+import videoLms from "../assets/video-lms3.mp4"
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -12,14 +13,14 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // 👈 sahifa reload bo‘lmasligi uchun MUHIM
+    e.preventDefault();
     setLoading(true);
     setError("");
 
     const redirectPath = await login(username, password);
 
     if (redirectPath) {
-      navigate(redirectPath); // 👈 sahifani yo‘naltirish
+      navigate(redirectPath);
     } else {
       setError("Login yoki parol noto‘g‘ri!");
     }
@@ -29,6 +30,18 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      {/* 🔥 VIDEO background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="background-video"
+      >
+        <source src={videoLms} type="video/mp4" className={"width: 300px"} />
+        Sizning brauzeringiz video formatini qo‘llab-quvvatlamaydi.
+      </video>
+
       <div className="login-wrapper">
         <div className="login-container">
           <h2>Tizimga kirish</h2>

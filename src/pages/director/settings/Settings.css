@@ -1,0 +1,109 @@
+.settings-panel {
+  position: fixed;
+  top: 65px;
+  left: 240px;
+  width: 230px;
+  height: calc(100vh - 70px); /* Balandlik ekranga mos */
+  z-index: 999;
+  background-color: #fff;
+  border-left: 1px solid #eee;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+
+  /* 🆕 Scrollni qo‘shamiz */
+  overflow-y: auto;
+  scrollbar-width: thin; /* Firefox uchun nozik scroll */
+  scrollbar-color: #d0021b;
+}
+
+/* ixtiyoriy: scrollbar dizayni (Chrome uchun) */
+.settings-panel::-webkit-scrollbar {
+  width: 6px;
+}
+.settings-panel::-webkit-scrollbar-thumb {
+  background-color: #d0021b;
+  border-radius: 4px;
+}
+
+
+
+.settings-panel.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.settings-header h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #d0021b;
+}
+
+/* Linklar */
+.settings-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 8px;
+    border-radius: 6px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: background 0.2s;
+}
+
+.settings-link:hover {
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.settings-btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    position: relative;
+    font-weight: 500;
+    background-color: var(--primary-dark);
+    border: none;
+}
+
+/* Icon */
+.settings-icon {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #d0021b;
+    transition: none;
+}
+
+.settings-link:hover .settings-icon {
+    color: #d0021b;
+}

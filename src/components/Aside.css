@@ -87,7 +87,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 20px;
+  padding: 12px 25px;
   color: var(--text-light);
   text-decoration: none;
   transition: all 0.3s ease;
@@ -96,4 +96,13 @@
   font-weight: 500;
   background-color: var(--primary-dark);
   border: none;
+}
+
+.settings-btn {
+  margin-top: auto;
+}
+
+.aside-link .icon {
+  font-size: 16px;
+  margin-right: 10px;
 }
