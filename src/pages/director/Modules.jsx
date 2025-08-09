@@ -19,7 +19,7 @@ const Modules = () => {
       settingAmount: "300 000",
       estimatedAmount: "0",
       calcSetting: "Fixed per module",
-      moduleType: "Theory",
+      moduleType: "Theory", 
     },
   ]);
 

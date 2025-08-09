@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.finance-all{
+  margin: 70px 50px 0 300px; /* aside uchun joy */
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  width: 1100px;
+  color:#333;
+}
+
+.page-title{
+  font-size:22px;
+  font-weight:600;
+  margin: 0 0 14px 0;
+}
+
+/* Top grid: stat cards + chart */
+.top-grid{
+  display:grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap:16px;
+  margin-bottom: 16px;
+}
+
+/* Stats column (chap) */
+.stats-col{ display:flex; flex-direction:column; gap:12px; }
+
+.stat-card{
+  position:relative;
+  display:flex;
+  gap:14px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:8px;
+  min-height:90px;
+  padding:14px 14px 14px 10px;
+  overflow:hidden;
+}
+.stat-bar{
+  width:6px;
+  background:#d0021b; /* primary */
+  border-radius:6px;
+}
+.stat-body{ flex:1; display:flex; flex-direction:column; gap:6px; }
+.stat-title{ color:#555; }
+.stat-amount{ font-size:18px; font-weight:600; }
+.stat-period{ display:flex; align-items:center; gap:8px; color:#777; font-size:12px; }
+.stat-icon{
+  display:flex; align-items:center; justify-content:center;
+  width:46px; height:46px; border-radius:10px; background:#f7f7f7; color:#d0021b;
+  border:1px solid #eee; margin-left:auto;
+}
+.details-btn{
+  margin-top:2px;
+  background:transparent; border:none; color:#777; display:inline-flex; align-items:center; gap:6px;
+  cursor:pointer; padding:0; font-size:12px;
+}
+.details-btn:hover{ color:#d0021b; }
+
+/* Chart card (o‘ng) */
+.chart-card{
+  background:#fff; border:1px solid #ddd; border-radius:8px; overflow:hidden;
+  display:flex; flex-direction:column; min-height:200px;
+}
+.chart-header{
+  padding:10px 12px; border-bottom:1px solid #eee; color:#777; font-weight:600;
+}
+.chart-placeholder{
+  position:relative; flex:1; display:flex; align-items:center; justify-content:center; min-height:170px;
+  background: linear-gradient(180deg, #fff, #fafafa);
+}
+.spinner{
+  width:28px; height:28px; border-radius:50%;
+  border:3px solid #e8e8e8; border-top-color:#d0021b;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+/* Filters */
+.filters-grid{
+  display:grid; grid-template-columns: repeat(12, 1fr);
+  gap:10px; margin: 14px 0 12px 0;
+}
+.f-field{ grid-column: span 3; }
+.f-field label{ display:block; margin-bottom:6px; color:#777; }
+.input, .select{
+  display:flex; align-items:center; gap:8px; background:#fff;
+  border:1px solid #ddd; border-radius:6px; padding:8px 10px;
+}
+.input input, .select select{
+  border:none; outline:none; font-family:'Poppins',sans-serif; font-size:12px; width:100%;
+  background:transparent; color:#333;
+}
+.ic svg{ color:#999; }
+
+.f-actions{ grid-column: span 2; display:flex; align-items:flex-end; }
+.filter-btn{
+  background:#6f2dbd; /* ko‘k-binafsha tag hosil qilamiz (rasmga yaqin) */
+  color:#fff; border:none; padding:8px 14px; border-radius:999px;
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:13px;
+}
+.filter-btn:hover{ opacity:.92; }
+
+/* Table */
+.table-wrap{
+  background:#fff; border:1px solid #eee; border-radius:8px; overflow:hidden;
+}
+.payments-table{ width:100%; border-collapse: collapse; }
+.payments-table thead th{
+  text-align:left; padding:12px 14px; background:#fafafa; border-bottom:1px solid #eee;
+  font-weight:600;
+}
+.payments-table tbody td{
+  padding:12px 14px; border-bottom:1px solid #f0f0f0;
+}
+.t-row:hover{ background:#fdf6ed; transition:.25s ease; }
+.empty{ text-align:center; padding:16px; color:#777; }
+
+/* Floating export button */
+.floating-export{
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background:#d0021b;
+  color:#fff;
+  border:none;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 8px 20px rgba(208,2,27,0.35);
+  cursor:pointer;
+}
+.floating-export:hover{ transform: translateY(-1px); }
+
+/* Responsive */
+@media (max-width: 1200px){
+  .filters-grid{ grid-template-columns: repeat(6, 1fr); }
+  .f-field{ grid-column: span 3; }
+  .f-actions{ grid-column: span 6; }
+}

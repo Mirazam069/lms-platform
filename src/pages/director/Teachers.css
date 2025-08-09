@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 .teachers-page {
-  margin: 70px 50px 0 300px;
+  margin: 70px 50px 0 300px; /* aside uchun joy */
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
+  width: 1100px;
+  color: #333;
 }
 
+/* Header */
 .teachers-header {
   display: flex;
   justify-content: space-between;
@@ -11,57 +16,312 @@
   margin-bottom: 20px;
 }
 
-.teachers-header h2 {
-  font-size: 24px;
+.teachers-title {
+  display: flex;
+  align-items: center;
+}
+
+.teachers-title h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.teacher-count {
+  font-weight: 400;
+  font-size: 14px;
+  color: #777;
+  margin-left: 12px;
+}
+
+/* Buttons */
+.add-btn {
+  background-color: #d0021b;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  transition: background 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #e76810;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  transition: color 0.25s ease;
+}
+
+.icon-btn:hover {
+  color: #d0021b;
+}
+
+/* Search */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+}
+
+/* Form card */
+.form-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.form-header h2 {
+  font-size: 16px;
   font-weight: 600;
 }
 
-.teachers-header h2 span {
-  font-size: 16px;
-  margin-left: 10px;
-  color: gray;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
-.teachers-buttons {
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  color: #555;
+}
+
+.input,
+.select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.input input,
+.select select {
+  border: none;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  width: 100%;
+}
+
+.select {
+  position: relative;
+}
+
+.select .chev {
+  position: absolute;
+  right: 8px;
+  color: #777;
+}
+
+/* Photo preview */
+.photo-preview {
+  margin-top: 6px;
+}
+
+.photo-preview img {
+  width: 70px;
+  height: 70px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+/* Actions row */
+.actions-row {
+  grid-column: 1 / -1;
   display: flex;
   gap: 10px;
+  margin-top: 10px;
 }
 
-.add-btn {
-  background-color: #f4801f;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 25px;
-  border: none;
+.btn-ghost {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
+  font-family: 'Poppins', sans-serif;
 }
 
-.import-btn {
-  padding: 10px 18px;
-  border-radius: 25px;
-  border: 1px solid #f4801f;
-  background: white;
-  color: #f4801f;
-  cursor: pointer;
-}
-
+/* Table / List */
 .teachers-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.teacher-card {
-  width: 48%;
+  width: 100%;
+  border-collapse: collapse;
   background: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  padding: 20px;
-  border-radius: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.teachers-list-head,
+.teacher-row {
+  display: grid;
+  grid-template-columns: 90px 1.2fr 1fr 1fr 0.8fr 160px;
+  align-items: center;
+}
+
+.teachers-list-head {
+  background: #f9f9f9;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+}
+
+.teachers-list-head .c {
+  padding: 10px 14px;
+}
+
+.teacher-row {
+  border-bottom: 1px solid #eee;
+  transition: background 0.3s ease;
+}
+
+.teacher-row:hover {
+  background-color: #fdf6ed;
+}
+
+.teacher-row .c {
+  padding: 10px 14px;
+}
+
+/* Avatar */
+.avatar {
+  width: 36px;
+  height: 36px;
+  background-color: #d0021b;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Action buttons */
+.actions-inline {
+  display: flex;
+  gap: 6px;
+}
+
+.mini-btn {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 6px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.teacher-card:hover {
-  transform: scale(1.01);
+.mini-btn:hover {
+  background-color: #f2f2f2;
 }
 
+.mini-btn.danger:hover {
+  background-color: rgba(208, 2, 27, 0.1);
+  color: #d0021b;
+}
+
+/* Empty state */
+.empty {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+}
+
+/* SMS Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(51, 51, 51, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 18px;
+  width: min(500px, 90%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-head h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modal-body {
+  margin-top: 10px;
+}
+
+.modal-body textarea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+}
+
+.modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}

@@ -5,6 +5,16 @@ import "./ActiveLeads.css";
 
 
 const ActiveLeads = () => {
+  const [columnBoxes, setColumnBoxes] = useState({
+  lead: [],
+  expectation: [],
+  rejected: [],
+  joined: [],
+});
+const [activeColumn, setActiveColumn] = useState(null);
+const [boxName, setBoxName] = useState("");
+const [showColumnPanel, setShowColumnPanel] = useState(false);
+
     const [leads, setLeads] = useState([
   { id: 1, name: "Ali Valiyev", phone: "+998901234567", group: "Frontend A", time: "10:00", source: "Instagram", status: "lead" },
   { id: 2, name: "Shahnoza Karimova", phone: "+998911112233", group: "Backend B", time: "14:00", source: "Google", status: "expectation" },

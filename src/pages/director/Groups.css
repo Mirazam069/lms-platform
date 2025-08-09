@@ -1,55 +1,109 @@
-.groups-page {
-  margin: 70px 50px 0 300px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.groups-page{
+  margin: 70px 50px 0 300px; /* aside uchun joy */
   font-family: 'Poppins', sans-serif;
-  max-width: 1100px;
+  font-size: 12px;
+  width: 1100px;
+  color: #333;
 }
 
-h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
+/* Header */
+.groups-header{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:20px;
+}
+.groups-title{ display:flex; align-items:center; }
+.groups-title h1{ font-size:20px; font-weight:600; margin:0; }
+.group-count{ font-weight:400; font-size:14px; color:#777; margin-left:12px; }
+
+/* Search + Add */
+.header-buttons{ display:flex; align-items:center; gap:10px; }
+.search-bar{
+  display:flex; align-items:center; gap:8px;
+  background:#fff; border:1px solid #ddd; padding:6px 10px; border-radius:6px;
+}
+.search-bar input{
+  border:none; outline:none; font-family:'Poppins',sans-serif; font-size:12px;
+}
+.add-btn{
+  background-color:#d0021b; color:#fff; border:none; padding:8px 14px; border-radius:6px;
+  cursor:pointer; font-family:'Poppins',sans-serif; display:flex; align-items:center; gap:6px;
+  font-size:13px; transition: background .3s ease;
+}
+.add-btn:hover{ background-color:#e76810; }
+.btn-ghost{
+  background:#eee; border:1px solid #ccc; padding:6px 12px; border-radius:6px; cursor:pointer;
+  font-family:'Poppins',sans-serif;
 }
 
-.group-table {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
+/* Form card */
+.form-card{
+  background:#fff; border:1px solid #ddd; border-radius:8px; padding:18px; margin-bottom:20px;
+}
+.form-header{
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;
+}
+.form-header h2{ font-size:16px; font-weight:600; margin:0; }
+
+.form-grid{
+  display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;
+}
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field label{ font-size:12px; color:#555; }
+.input, .select{
+  display:flex; align-items:center; gap:6px; padding:8px;
+  border:1px solid #ddd; border-radius:6px; background:#fff;
+}
+.input input, .select select{
+  border:none; outline:none; font-family:'Poppins',sans-serif; font-size:12px; width:100%;
+}
+.select{ position:relative; }
+.select .chev{ position:absolute; right:8px; color:#777; }
+
+.actions-row{
+  grid-column:1 / -1; display:flex; gap:10px; margin-top:10px;
 }
 
-.group-header,
-.group-row {
-  display: grid;
-  grid-template-columns: 2fr 2fr 2fr 2fr 1fr;
-  padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-  align-items: center;
+/* List */
+.groups-list{
+  background:#fff; border-radius:8px; overflow:hidden; border:1px solid #eee;
 }
-
-.group-header {
-  background-color: #f7f7f7;
-  font-weight: bold;
+.groups-list-head, .group-row{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr 1fr .7fr .8fr 140px;
+  align-items:center;
 }
-
-.group-row:hover {
-  background-color: #fafafa;
+.groups-list-head{
+  background:#f9f9f9; font-weight:600; border-bottom:1px solid #eee;
 }
-
-.edit-btn,
-.delete-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  margin-right: 8px;
-  transition: transform 0.2s ease;
+.groups-list-head .c{ padding:10px 14px; }
+.group-row{
+  border-bottom:1px solid #eee; transition: background .3s ease;
 }
+.group-row:hover{ background-color:#fdf6ed; }
+.group-row .c{ padding:10px 14px; }
 
-.edit-btn:hover {
-  color: #007bff;
-  transform: scale(1.1);
+/* Status */
+.status.st-active{ color:#28a745; font-weight:600; }
+.status.st-inactive{ color:#d0021b; font-weight:600; }
+
+/* Actions */
+.actions-inline{ display:flex; gap:6px; }
+.mini-btn{
+  background:#eee; border:1px solid #ccc; padding:6px; border-radius:6px; cursor:pointer;
+  font-size:14px; color:#333; transition: background .3s ease, color .3s ease;
 }
+.mini-btn:hover{ background:#f2f2f2; }
+.mini-btn.danger:hover{ background:rgba(208,2,27,0.1); color:#d0021b; }
 
-.delete-btn:hover {
-  color: #d0021b;
-  transform: scale(1.1);
+/* Empty */
+.empty{ padding:20px; text-align:center; color:#777; }
+
+/* Responsive */
+@media (max-width: 1100px){
+  .form-grid{ grid-template-columns: repeat(2, 1fr); }
+  .groups-list-head, .group-row{
+    grid-template-columns: 1.4fr 1fr .9fr .7fr .8fr 130px;
+  }
 }

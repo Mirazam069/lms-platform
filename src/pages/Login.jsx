@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Login.css";
-import videoLms from "../assets/video-lms3.mp4"
+import videoLms from "../assets/video-lms.mp4"
 
 export default function Login() {
   const [username, setUsername] = useState("");

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.withdraw-page{
+  margin: 70px 50px 0 300px;
+  font-family:'Poppins',sans-serif;
+  font-size:12px;
+  width:1100px;
+  color:#333;
+}
+
+.page-title{ font-size:22px; font-weight:600; margin:0 0 12px 0; }
+
+/* Top layout */
+.top-grid{
+  display:grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap:16px;
+  margin-bottom:14px;
+}
+
+/* Stat card */
+.stat-card{
+  display:flex; align-items:center; gap:12px;
+  background:#fff; border:1px solid #ddd; border-radius:8px;
+  padding:14px; min-height:86px; position:relative; overflow:hidden;
+}
+.stat-card .left-bar{
+  width:6px; height:100%; background:#2aa3ff; border-radius:6px;
+  position:absolute; left:0; top:0;
+}
+.card-body{ display:flex; flex-direction:column; gap:6px; padding-left:6px; }
+.headline{ font-size:14px; }
+.headline b{ font-size:16px; }
+.period{ color:#777; margin-left:4px; }
+.sub{ display:flex; align-items:center; gap:8px; color:#777; }
+.card-icon{
+  margin-left:auto; width:46px; height:46px; border-radius:10px;
+  background:#f7f7f7; border:1px solid #eee; display:flex; align-items:center; justify-content:center;
+  color:#2aa3ff;
+}
+
+/* Chart placeholder */
+.chart-card{
+  background:#fff; border:1px solid #ddd; border-radius:8px; overflow:hidden;
+}
+.chart-body{
+  min-height:210px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg, #fff, #fafafa);
+}
+.spinner{
+  width:28px; height:28px; border-radius:50%;
+  border:3px solid #e8e8e8; border-top-color:#5aa2ff;
+  animation:spin .9s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg);} }
+
+/* Filters (bir qatorda) */
+.filters-row{
+  display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px;
+  margin: 12px 0;
+}
+.f-item{ display:flex; flex-direction:column; gap:6px; }
+.f-item label{ color:#777; }
+.input{
+  background:#fff; border:1px solid #ddd; border-radius:6px; padding:8px 10px;
+  font-family:'Poppins',sans-serif; font-size:12px; color:#333;
+}
+.input.ic{ display:flex; align-items:center; gap:8px; }
+.input.ic input{ border:none; outline:none; width:160px; font-size:12px; }
+.f-item .input{ width:180px; }
+.f-item.grow{ flex:1; }
+.f-item.grow .input{ width:100%; }
+.f-item select.input{ width:170px; }
+
+.filter-btn{
+  padding:8px 16px; border:none; border-radius:999px; cursor:pointer;
+  background:#6f2dbd; color:#fff; font-size:13px;
+}
+.filter-btn:hover{ opacity:.92; }
+
+/* Table */
+.table-wrap{
+  background:#fff; border:1px solid #eee; border-radius:8px; overflow:hidden;
+}
+.withdraw-table{ width:100%; border-collapse:collapse; }
+.withdraw-table thead th{
+  text-align:left; padding:12px 14px; background:#fafafa; border-bottom:1px solid #eee;
+  font-weight:600;
+}
+.withdraw-table tbody td{
+  padding:12px 14px; border-bottom:1px solid #f0f0f0;
+}
+.t-row:hover{ background:#fdf6ed; transition:.25s ease; }
+
+.empty{ text-align:center; padding:16px; color:#777; }
+
+/* Actions (download) */
+.actions{ text-align:right; }
+.round{
+  width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+  background:#fff; border:1px solid #28a745; color:#28a745; cursor:pointer;
+}
+.round:hover{ background:rgba(40,167,69,0.06); }

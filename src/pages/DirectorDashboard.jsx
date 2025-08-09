@@ -13,6 +13,8 @@ import Teachers from "./director/Teachers";
 import Topics from "./director/Topics";
 import ActiveLeads from "./director/ActiveLeads";
 import Debtors from "./director/finance/Debtors"; // TO‘G‘RI yo‘l
+import FinanceAll from "./director/finance/FinanceAll";
+import FinanceWithdraw from "./director/finance/FinanceWithdraw";
 
 const DirectorDashboard = () => {
   return (
@@ -33,6 +35,8 @@ const DirectorDashboard = () => {
             <Route path="teachers" element={<Teachers />} />
             <Route path="topics" element={<Topics />} />
             <Route path="finance/debtors" element={<Debtors />} />
+            <Route path="finance/all" element={<FinanceAll />} />
+            <Route path="finance/withdraw" element={<FinanceWithdraw />} />
           </Routes>
         </main>
       </div>

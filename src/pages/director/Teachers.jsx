@@ -1,50 +1,399 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import TeacherForm from "./TeacherForm";
+import React, { useMemo, useRef, useState } from "react";
 import "./Teachers.css";
+import {
+  FaPlus,
+  FaEdit,
+  FaTrash,
+  FaSms,
+  FaTimes,
+  FaSave,
+  FaChevronDown,
+  FaSearch,
+  FaUserCircle,
+  FaPhone,
+  FaCalendarAlt,
+} from "react-icons/fa";
 
-const Teachers = () => {
-  const [teachers, setTeachers] = useState([]);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const navigate = useNavigate();
+const initialTeachers = [
+  {
+    id: 1,
+    name: "Javlon Bek",
+    phone: "+998 90 123 45 67",
+    birthDate: "1992-05-14",
+    gender: "Erkak",
+    photoUrl: "",
+  },
+  {
+    id: 2,
+    name: "Dilnoza Karimova",
+    phone: "+998 93 700 20 30",
+    birthDate: "1996-11-02",
+    gender: "Ayol",
+    photoUrl: "",
+  },
+  {
+    id: 3,
+    name: "Sardor Akram",
+    phone: "+998 97 111 22 33",
+    birthDate: "1990-01-25",
+    gender: "Erkak",
+    photoUrl: "",
+  },
+];
 
-  const addTeacher = (newTeacher) => {
-    setTeachers((prev) => [...prev, newTeacher]);
-    setIsFormOpen(false);
+const emptyForm = {
+  id: null,
+  name: "",
+  phone: "",
+  birthDate: "",
+  gender: "Erkak",
+  photoFile: null,
+  photoUrl: "",
+};
+
+export default function Teachers() {
+  const [teachers, setTeachers] = useState(initialTeachers);
+  const [query, setQuery] = useState("");
+  const [formOpen, setFormOpen] = useState(true);
+  const [formMode, setFormMode] = useState("add"); // 'add' | 'edit'
+  const [form, setForm] = useState(emptyForm);
+
+  const [smsOpen, setSmsOpen] = useState(false);
+  const [smsTo, setSmsTo] = useState(null);
+  const [smsMessage, setSmsMessage] = useState("");
+
+  const fileRef = useRef(null);
+
+  // Filter by query (name/phone)
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return teachers;
+    return teachers.filter(
+      (t) =>
+        (t.name || "").toLowerCase().includes(q) ||
+        (t.phone || "").toLowerCase().includes(q)
+    );
+  }, [teachers, query]);
+
+  const resetForm = () => {
+    setForm(emptyForm);
+    if (fileRef.current) fileRef.current.value = "";
   };
 
-  const openTeacherProfile = (teacherId) => {
-    navigate(`/director/teachers/${teacherId}`);
+  const openAdd = () => {
+    setFormMode("add");
+    resetForm();
+    setFormOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const onEdit = (t) => {
+    setFormMode("edit");
+    setForm({
+      id: t.id,
+      name: t.name || "",
+      phone: t.phone || "",
+      birthDate: t.birthDate || "",
+      gender: t.gender || "Erkak",
+      photoFile: null,
+      photoUrl: t.photoUrl || "",
+    });
+    setFormOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const onDelete = (id) => {
+    const t = teachers.find((x) => x.id === id);
+    if (!t) return;
+    if (
+      window.confirm(
+        `"${t.name}" yozuvini o‘chirishni tasdiqlaysizmi?\nBu amalni qaytarib bo‘lmaydi.`
+      )
+    ) {
+      setTeachers((prev) => prev.filter((x) => x.id !== id));
+    }
+  };
+
+  const onOpenSMS = (t) => {
+    setSmsTo(t);
+    setSmsMessage("");
+    setSmsOpen(true);
+  };
+
+  const onSendSMS = async () => {
+    // TODO: API chaqiruvi shu yerda (POST /sms)
+    alert(
+      `SMS yuborildi:\nQabul qiluvchi: ${smsTo.name} (${smsTo.phone})\nMatn: ${smsMessage}`
+    );
+    setSmsOpen(false);
+    setSmsTo(null);
+    setSmsMessage("");
+  };
+
+  const handlePhotoChange = (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    setForm((p) => ({ ...p, photoFile: f, photoUrl: url }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name.trim()) {
+      alert("Ism kiritish majburiy.");
+      return;
+    }
+    if (!form.phone.trim()) {
+      alert("Telefon raqam majburiy.");
+      return;
+    }
+
+    if (formMode === "add") {
+      const newId = teachers.length
+        ? Math.max(...teachers.map((x) => x.id)) + 1
+        : 1;
+      const newTeacher = {
+        id: newId,
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        birthDate: form.birthDate || "",
+        gender: form.gender || "Erkak",
+        photoUrl: form.photoUrl || "",
+      };
+      // TODO: API POST /teachers
+      setTeachers((prev) => [newTeacher, ...prev]);
+      alert("O‘qituvchi qo‘shildi ✅");
+      resetForm();
+      setFormMode("add");
+    } else {
+      // TODO: API PUT /teachers/{id}
+      setTeachers((prev) =>
+        prev.map((x) =>
+          x.id === form.id
+            ? {
+                ...x,
+                name: form.name.trim(),
+                phone: form.phone.trim(),
+                birthDate: form.birthDate || "",
+                gender: form.gender || "Erkak",
+                photoUrl: form.photoUrl || x.photoUrl || "",
+              }
+            : x
+        )
+      );
+      alert("O‘qituvchi tahrirlandi ✨");
+    }
+  };
+
+  const onCancel = () => {
+    resetForm();
+    setFormMode("add");
   };
 
   return (
     <div className="teachers-page">
+      {/* Header */}
       <div className="teachers-header">
-        <h2>O‘qituvchilar <span>Miqdor — {teachers.length}</span></h2>
-        <div className="teachers-buttons">
-          <button onClick={() => setIsFormOpen(true)} className="add-btn">Yangi o‘qituvchi qo‘shish</button>
-          <button className="import-btn">📥 Import</button>
+        <div className="teachers-title">
+          <h1>O‘qituvchilar</h1>
+          <span className="teacher-count">Miqdor — {teachers.length} ta</span>
+        </div>
+
+        <div className="header-buttons">
+          <div className="search-bar">
+            <FaSearch />
+            <input
+              type="text"
+              placeholder="Qidirish: ism yoki telefon..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <button className="add-btn" onClick={openAdd}>
+            <FaPlus /> Yangisini qo‘shish
+          </button>
         </div>
       </div>
 
-      <div className="teachers-list">
-        {teachers.map((teacher, index) => (
-          <div key={index} className="teacher-card" onClick={() => openTeacherProfile(index)}>
-            <p><strong>{teacher.name}</strong></p>
-            <p>{teacher.phone}</p>
-            <p>0 guruhlar</p>
+      {/* Inline Add/Edit Form */}
+      {formOpen && (
+        <div className="form-card">
+          <div className="form-header">
+            <h2>{formMode === "add" ? "Yangi o‘qituvchi qo‘shish" : "Tahrirlash"}</h2>
+            <button className="icon-btn" title="Yopish" onClick={() => setFormOpen(false)}>
+              <FaTimes />
+            </button>
           </div>
-        ))}
+
+          <form onSubmit={onSubmit} className="form-grid">
+            <div className="field">
+              <label>Ism, Familiya</label>
+              <div className="input">
+                <FaUserCircle />
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                  placeholder="Masalan: Akmal Qodirov"
+                />
+              </div>
+            </div>
+
+            <div className="field">
+              <label>Telefon raqam</label>
+              <div className="input">
+                <FaPhone />
+                <input
+                  type="tel"
+                  value={form.phone}
+                  onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+                  placeholder="+998 9X XXX XX XX"
+                />
+              </div>
+            </div>
+
+            <div className="field">
+              <label>Tug‘ilgan sana</label>
+              <div className="input">
+                <FaCalendarAlt />
+                <input
+                  type="date"
+                  value={form.birthDate}
+                  onChange={(e) => setForm((p) => ({ ...p, birthDate: e.target.value }))}
+                />
+              </div>
+            </div>
+
+            <div className="field">
+              <label>Jins</label>
+              <div className="select">
+                <select
+                  value={form.gender}
+                  onChange={(e) => setForm((p) => ({ ...p, gender: e.target.value }))}
+                >
+                  <option>Erkak</option>
+                  <option>Ayol</option>
+                </select>
+                <FaChevronDown className="chev" />
+              </div>
+            </div>
+
+            <div className="field">
+              <label>Rasm (ixtiyoriy)</label>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+              />
+              {form.photoUrl ? (
+                <div className="photo-preview">
+                  <img src={form.photoUrl} alt="preview" />
+                </div>
+              ) : null}
+            </div>
+
+            <div className="actions-row">
+              <button className="add-btn" type="submit">
+                <FaSave />
+                {formMode === "add" ? "Saqlash" : "O‘zgartirishni saqlash"}
+              </button>
+              <button type="button" className="btn-ghost" onClick={onCancel}>
+                Bekor qilish
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* List */}
+      <div className="teachers-list">
+        <div className="teachers-list-head">
+          <div className="c">Foto</div>
+          <div className="c">Ism</div>
+          <div className="c">Telefon</div>
+          <div className="c">Tug‘ilgan sana</div>
+          <div className="c">Jins</div>
+          <div className="c">Amallar</div>
+        </div>
+
+        {filtered.length === 0 ? (
+          <div className="empty">Ko‘rsatiladigan ma’lumotlar yo‘q</div>
+        ) : (
+          filtered.map((t) => (
+            <div className="teacher-row" key={t.id}>
+              <div className="c">
+                {t.photoUrl ? (
+                  <img className="avatar-img" src={t.photoUrl} alt={t.name} />
+                ) : (
+                  <div className="avatar">{t.name?.charAt(0)?.toUpperCase() || "U"}</div>
+                )}
+              </div>
+              <div className="c">{t.name}</div>
+              <div className="c">{t.phone}</div>
+              <div className="c">{t.birthDate || "-"}</div>
+              <div className="c">{t.gender || "-"}</div>
+              <div className="c">
+                <div className="actions-inline">
+                  <button className="mini-btn" title="Tahrirlash" onClick={() => onEdit(t)}>
+                    <FaEdit />
+                  </button>
+                  <button className="mini-btn" title="SMS yuborish" onClick={() => onOpenSMS(t)}>
+                    <FaSms />
+                  </button>
+                  <button className="mini-btn" title="O‘chirish" onClick={() => onDelete(t.id)}>
+                    <FaTrash />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
-      {isFormOpen && (
-        <TeacherForm
-          onClose={() => setIsFormOpen(false)}
-          onSave={addTeacher}
-        />
+      {/* SMS Modal */}
+      {smsOpen && (
+        <div className="modal-backdrop" onClick={() => setSmsOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-head">
+              <h3>SMS yuborish</h3>
+              <button className="icon-btn" onClick={() => setSmsOpen(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="to">
+                <span>Qabul qiluvchi:</span>
+                <strong>
+                  {smsTo?.name} — {smsTo?.phone}
+                </strong>
+              </div>
+              <textarea
+                rows={5}
+                maxLength={400}
+                placeholder="SMS matnini kiriting (400 ta belgigacha)..."
+                value={smsMessage}
+                onChange={(e) => setSmsMessage(e.target.value)}
+              />
+              <div className="meta">
+                <span>Belgilar: {smsMessage.length} / 400</span>
+              </div>
+            </div>
+            <div className="modal-foot">
+              <button className="btn-ghost" onClick={() => setSmsOpen(false)}>
+                Bekor qilish
+              </button>
+              <button
+                className="add-btn"
+                disabled={!smsMessage.trim()}
+                onClick={onSendSMS}
+              >
+                Yuborish
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
-};
-
-export default Teachers;
+}

@@ -1,4 +1,4 @@
-/* Qoraygan fon */
+/* Overlay */
 .overlay {
   position: fixed;
   top: 0;
@@ -6,101 +6,132 @@
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 999999; /* 🔴 Bu yerda z-index ni katta qiling */
+  z-index: 99999;
   display: flex;
   justify-content: flex-end;
 }
 
-
-/* O'ngdan ochiladigan panel */
+/* Panel */
 .teacher-form-panel {
-  background-color: #fff;
-  width: 400px;
+  width: 420px;
   height: 100%;
-  padding: 30px;
-  box-shadow: -3px 0 10px rgba(0, 0, 0, 0.2);
-  animation: slideIn 0.3s ease forwards;
+  background: #fff;
+  padding: 30px 30px;
+  box-shadow: -6px 0 20px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 18px;
+  border-bottom-left-radius: 18px;
+  animation: slideIn 0.35s ease forwards;
   font-family: 'Poppins', sans-serif;
   overflow-y: auto;
 }
 
-/* Sarlavha va yopish tugmasi */
+/* Header */
 .form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .form-header h2 {
-  font-size: 20px;
+  font-size: 16px;
+  font-weight: 600;
   color: #d0021b;
   margin: 0;
 }
 
 .close-btn {
+  font-size: 20px;
+  color: #bbb;
   background: none;
   border: none;
-  font-size: 28px;
   cursor: pointer;
-  color: #999;
   transition: color 0.2s;
 }
-
 .close-btn:hover {
   color: #d0021b;
 }
 
-/* Inputlar */
-form {
+/* Form styles */
+.form-body {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
-label {
-  font-size: 14px;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+/* Floating Label */
+.form-field {
+  position: relative;
+  margin-top: 12px;
 }
 
-input,
-select {
+.form-field input,
+.form-field select {
+  width: 100%;
   padding: 10px 12px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: #f9f9f9;
-  transition: 0.3s;
+  background: #f9f9f9;
+  transition: border 0.3s, box-shadow 0.3s;
+  font-family: 'Poppins', sans-serif;
 }
 
-input:focus,
-select:focus {
+.form-field input:focus,
+.form-field select:focus {
   border-color: #d0021b;
   background-color: #fff;
-  outline: none;
   box-shadow: 0 0 0 3px rgba(208, 2, 27, 0.1);
+  outline: none;
 }
 
-/* Saqlash tugmasi */
+.form-field label {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 13px;
+  pointer-events: none;
+  transition: 0.2s;
+  background: #fff;
+  padding: 0 4px;
+}
+
+.form-field input:focus + label,
+.form-field input:not(:placeholder-shown) + label,
+.form-field select:focus + label {
+  top: -9px;
+  left: 10px;
+  font-size: 11px;
+  color: #d0021b;
+}
+
+.form-field .fixed {
+  top: -9px;
+  left: 10px;
+  font-size: 11px;
+  color: #d0021b;
+}
+
+/* Save button */
 .save-btn {
-  margin-top: 10px;
-  padding: 12px;
+  padding: 10px;
+  width: 100%;
   background-color: #d0021b;
   color: white;
+  font-size: 14px;
   font-weight: 600;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s;
 }
-
 .save-btn:hover {
-  background-color: #a90016;
+  background-color: #a80018;
 }
 
+/* Animation */
 @keyframes slideIn {
   from {
     transform: translateX(100%);
