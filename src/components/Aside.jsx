@@ -78,19 +78,27 @@ const Aside = () => {
             </Link>
           ))}
 
+          {/* 🔴 Faqat bosganda ochiladi */}
           <button
             className="aside-link moliya-btn"
-            onClick={() => setIsFinanceOpen(!isFinanceOpen)}
-            onMouseEnter={() => setIsFinanceOpen(true)}
+            aria-expanded={isFinanceOpen}
+            onClick={() => {
+              setIsFinanceOpen((v) => !v);
+              setShowSettings(false); // bir-birini yopsin
+            }}
           >
             <FaMoneyCheckAlt className="icon" />
             <span>Moliya</span>
           </button>
 
+          {/* 🔴 Faqat bosganda ochiladi */}
           <button
             className="aside-link settings-btn"
-            onClick={() => setShowSettings(true)}
-            onMouseEnter={() => setShowSettings(true)}
+            aria-expanded={showSettings}
+            onClick={() => {
+              setShowSettings((v) => !v);
+              setIsFinanceOpen(false);
+            }}
           >
             <FaCog className="icon" />
             <span>Sozlamalar</span>
@@ -109,7 +117,6 @@ const Aside = () => {
           <SettingsPanel onClose={() => setShowSettings(false)} />
         </div>
       )}
-      
     </>
   );
 };

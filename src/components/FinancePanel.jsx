@@ -32,15 +32,21 @@ const FinancePanel = ({ onClose }) => {
   }, [onClose]);
 
   return (
-    <div className={`finance-panel show`} ref={panelRef}>
+    <div className="finance-panel show" ref={panelRef}>
       <div className="finance-header">
         <h3>Moliya</h3>
         <button onClick={onClose} className="close-btn">
           <FaTimes />
         </button>
       </div>
+
       {financeLinks.map((item, index) => (
-        <Link to={item.path} key={index} className="finance-link">
+        <Link
+          to={item.path}
+          key={index}
+          className="finance-link"
+          onClick={onClose}   // ← bosilganda panel yopiladi
+        >
           <item.icon className="finance-icon" />
           <span>{item.label}</span>
         </Link>

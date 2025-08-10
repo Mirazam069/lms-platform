@@ -15,6 +15,8 @@ import ActiveLeads from "./director/ActiveLeads";
 import Debtors from "./director/finance/Debtors"; // TO‘G‘RI yo‘l
 import FinanceAll from "./director/finance/FinanceAll";
 import FinanceWithdraw from "./director/finance/FinanceWithdraw";
+import FinanceExpenses from "./director/finance/Expenses";
+import Salary from "./director/finance/Salary";
 
 const DirectorDashboard = () => {
   return (
@@ -37,6 +39,8 @@ const DirectorDashboard = () => {
             <Route path="finance/debtors" element={<Debtors />} />
             <Route path="finance/all" element={<FinanceAll />} />
             <Route path="finance/withdraw" element={<FinanceWithdraw />} />
+            <Route path="finance/expenses" element={<FinanceExpenses />} />
+            <Route path="finance/salary" element={<Salary />} />
           </Routes>
         </main>
       </div>
