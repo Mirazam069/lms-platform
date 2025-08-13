@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   FaTachometerAlt,
-  FaBookOpen,
+  // FaBookOpen,
   FaLayerGroup,
   FaUserTie,
   FaUserGraduate,
@@ -17,7 +17,7 @@ import "./Aside.css";
 const directorMenu = [
   { label: "Dashboard", path: "/director/dashboard", icon: FaTachometerAlt },
   { label: "Faol lidlar", path: "/director/active-leads", icon: FaUserTie },
-  { label: "Kurslar", path: "/director/courses", icon: FaBookOpen },
+  // { label: "Kurslar", path: "/director/courses", icon: FaBookOpen },
   { label: "Guruhlar", path: "/director/groups", icon: FaLayerGroup },
   { label: "Talabalar", path: "/director/students", icon: FaUserGraduate },
   { label: "O‘qituvchilar", path: "/director/teachers", icon: FaChalkboardTeacher },

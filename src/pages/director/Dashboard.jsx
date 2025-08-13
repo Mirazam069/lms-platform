@@ -147,7 +147,7 @@ const Dashboard = () => {
     </div>
 
 
-      <div style={{ width: "1100px", height: "300px", margin: "30px 50px 0 300px" }} className="lineChart-container">
+      <div style={{ width: "1330px", height: "300px", margin: "30px 50px 0 125px" }} className="lineChart-container">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -166,7 +166,7 @@ const Dashboard = () => {
       </ResponsiveContainer>
     </div>
 
-          <div className="payment-stats-wrapper">
+          {/* <div className="payment-stats-wrapper">
         {paymentStats.map(({ id, Icon, label, value }) => (
           <div key={id} className="payment-stat-box">
             <div className="stat-icon">
@@ -178,7 +178,7 @@ const Dashboard = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </>
   );
 };

@@ -1,7 +1,7 @@
 .finance-panel {
   position: fixed;
   top: 65px;
-  left: 240px;
+  left: 130px;
   width: 230px;
   height: calc(100vh - 70px);
   background-color: #fff;

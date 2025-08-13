@@ -17,7 +17,7 @@
   top: 64px;
   left: 0;
   height: 100%;
-  width: 240px;
+  width: 130px;
   background-color: var(--primary-dark); /* Asosiy aside foni */
   padding-top: 20px;
   font-family: 'Poppins', sans-serif;
@@ -40,9 +40,10 @@
 }
 
 .aside-logo h2 {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--text-white);
   font-weight: 600;
+  text-align: center;
 }
 
 .aside-nav {
@@ -52,9 +53,10 @@
 
 .aside-link {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
+  gap: 5px;
+  padding: 12px 5px;
   color: var(--text-light);
   text-decoration: none;
   transition: all 0.3s ease;
@@ -62,10 +64,11 @@
   position: relative;
   font-weight: 500;
   font-size: 14px;
+  /* border: 1px solid #f8f8f8; */
 }
 
 .aside-link .icon {
-  font-size: 18px;
+  font-size: 25px;
   transition: color 0.3s ease;
 }
 
@@ -102,7 +105,4 @@
   margin-top: auto;
 }
 
-.aside-link .icon {
-  font-size: 16px;
-  margin-right: 10px;
-}
+

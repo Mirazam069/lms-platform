@@ -12,7 +12,9 @@ import {
   FaUserCircle,
   FaPhone,
   FaCalendarAlt,
+  FaDoorOpen,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const initialTeachers = [
   {
@@ -64,7 +66,6 @@ export default function Teachers() {
 
   const fileRef = useRef(null);
 
-  // Filter by query (name/phone)
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return teachers;
@@ -105,11 +106,7 @@ export default function Teachers() {
   const onDelete = (id) => {
     const t = teachers.find((x) => x.id === id);
     if (!t) return;
-    if (
-      window.confirm(
-        `"${t.name}" yozuvini o‘chirishni tasdiqlaysizmi?\nBu amalni qaytarib bo‘lmaydi.`
-      )
-    ) {
+    if (window.confirm(`"${t.name}" yozuvini o‘chirishni tasdiqlaysizmi?`)) {
       setTeachers((prev) => prev.filter((x) => x.id !== id));
     }
   };
@@ -120,8 +117,7 @@ export default function Teachers() {
     setSmsOpen(true);
   };
 
-  const onSendSMS = async () => {
-    // TODO: API chaqiruvi shu yerda (POST /sms)
+  const onSendSMS = () => {
     alert(
       `SMS yuborildi:\nQabul qiluvchi: ${smsTo.name} (${smsTo.phone})\nMatn: ${smsMessage}`
     );
@@ -137,14 +133,10 @@ export default function Teachers() {
     setForm((p) => ({ ...p, photoFile: f, photoUrl: url }));
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    if (!form.name.trim()) {
-      alert("Ism kiritish majburiy.");
-      return;
-    }
-    if (!form.phone.trim()) {
-      alert("Telefon raqam majburiy.");
+    if (!form.name.trim() || !form.phone.trim()) {
+      alert("Ism va telefon majburiy.");
       return;
     }
 
@@ -160,25 +152,14 @@ export default function Teachers() {
         gender: form.gender || "Erkak",
         photoUrl: form.photoUrl || "",
       };
-      // TODO: API POST /teachers
       setTeachers((prev) => [newTeacher, ...prev]);
       alert("O‘qituvchi qo‘shildi ✅");
       resetForm();
       setFormMode("add");
     } else {
-      // TODO: API PUT /teachers/{id}
       setTeachers((prev) =>
         prev.map((x) =>
-          x.id === form.id
-            ? {
-                ...x,
-                name: form.name.trim(),
-                phone: form.phone.trim(),
-                birthDate: form.birthDate || "",
-                gender: form.gender || "Erkak",
-                photoUrl: form.photoUrl || x.photoUrl || "",
-              }
-            : x
+          x.id === form.id ? { ...x, ...form } : x
         )
       );
       alert("O‘qituvchi tahrirlandi ✨");
@@ -204,7 +185,7 @@ export default function Teachers() {
             <FaSearch />
             <input
               type="text"
-              placeholder="Qidirish: ism yoki telefon..."
+              placeholder="Qidirish..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -215,17 +196,18 @@ export default function Teachers() {
         </div>
       </div>
 
-      {/* Inline Add/Edit Form */}
+      {/* Form */}
       {formOpen && (
         <div className="form-card">
           <div className="form-header">
-            <h2>{formMode === "add" ? "Yangi o‘qituvchi qo‘shish" : "Tahrirlash"}</h2>
-            <button className="icon-btn" title="Yopish" onClick={() => setFormOpen(false)}>
+            <h2>{formMode === "add" ? "Yangi o‘qituvchi" : "Tahrirlash"}</h2>
+            <button className="icon-btn" onClick={() => setFormOpen(false)}>
               <FaTimes />
             </button>
           </div>
 
           <form onSubmit={onSubmit} className="form-grid">
+            {/* Ism */}
             <div className="field">
               <label>Ism, Familiya</label>
               <div className="input">
@@ -234,11 +216,11 @@ export default function Teachers() {
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="Masalan: Akmal Qodirov"
                 />
               </div>
             </div>
 
+            {/* Telefon */}
             <div className="field">
               <label>Telefon raqam</label>
               <div className="input">
@@ -247,11 +229,11 @@ export default function Teachers() {
                   type="tel"
                   value={form.phone}
                   onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-                  placeholder="+998 9X XXX XX XX"
                 />
               </div>
             </div>
 
+            {/* Sana */}
             <div className="field">
               <label>Tug‘ilgan sana</label>
               <div className="input">
@@ -264,6 +246,7 @@ export default function Teachers() {
               </div>
             </div>
 
+            {/* Jins */}
             <div className="field">
               <label>Jins</label>
               <div className="select">
@@ -278,25 +261,21 @@ export default function Teachers() {
               </div>
             </div>
 
+            {/* Rasm */}
             <div className="field">
-              <label>Rasm (ixtiyoriy)</label>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoChange}
-              />
-              {form.photoUrl ? (
+              <label>Rasm</label>
+              <input ref={fileRef} type="file" accept="image/*" onChange={handlePhotoChange} />
+              {form.photoUrl && (
                 <div className="photo-preview">
                   <img src={form.photoUrl} alt="preview" />
                 </div>
-              ) : null}
+              )}
             </div>
 
             <div className="actions-row">
               <button className="add-btn" type="submit">
                 <FaSave />
-                {formMode === "add" ? "Saqlash" : "O‘zgartirishni saqlash"}
+                {formMode === "add" ? "Saqlash" : "O‘zgartirish"}
               </button>
               <button type="button" className="btn-ghost" onClick={onCancel}>
                 Bekor qilish
@@ -318,7 +297,7 @@ export default function Teachers() {
         </div>
 
         {filtered.length === 0 ? (
-          <div className="empty">Ko‘rsatiladigan ma’lumotlar yo‘q</div>
+          <div className="empty">Ma’lumot yo‘q</div>
         ) : (
           filtered.map((t) => (
             <div className="teacher-row" key={t.id}>
@@ -326,7 +305,7 @@ export default function Teachers() {
                 {t.photoUrl ? (
                   <img className="avatar-img" src={t.photoUrl} alt={t.name} />
                 ) : (
-                  <div className="avatar">{t.name?.charAt(0)?.toUpperCase() || "U"}</div>
+                  <div className="avatar">{t.name?.charAt(0)?.toUpperCase()}</div>
                 )}
               </div>
               <div className="c">{t.name}</div>
@@ -335,13 +314,16 @@ export default function Teachers() {
               <div className="c">{t.gender || "-"}</div>
               <div className="c">
                 <div className="actions-inline">
-                  <button className="mini-btn" title="Tahrirlash" onClick={() => onEdit(t)}>
+                  <Link to={`/director/teachers/${t.id}`} className="mini-btn cabinet-btn" title="Kabinet">
+                    <FaDoorOpen />
+                  </Link>
+                  <button className="mini-btn" onClick={() => onEdit(t)} title="Tahrirlash">
                     <FaEdit />
                   </button>
-                  <button className="mini-btn" title="SMS yuborish" onClick={() => onOpenSMS(t)}>
+                  <button className="mini-btn" onClick={() => onOpenSMS(t)} title="SMS">
                     <FaSms />
                   </button>
-                  <button className="mini-btn" title="O‘chirish" onClick={() => onDelete(t.id)}>
+                  <button className="mini-btn" onClick={() => onDelete(t.id)} title="O‘chirish">
                     <FaTrash />
                   </button>
                 </div>
@@ -351,7 +333,7 @@ export default function Teachers() {
         )}
       </div>
 
-      {/* SMS Modal */}
+      {/* SMS modal */}
       {smsOpen && (
         <div className="modal-backdrop" onClick={() => setSmsOpen(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -371,23 +353,16 @@ export default function Teachers() {
               <textarea
                 rows={5}
                 maxLength={400}
-                placeholder="SMS matnini kiriting (400 ta belgigacha)..."
                 value={smsMessage}
                 onChange={(e) => setSmsMessage(e.target.value)}
               />
-              <div className="meta">
-                <span>Belgilar: {smsMessage.length} / 400</span>
-              </div>
+              <div className="meta">Belgilar: {smsMessage.length} / 400</div>
             </div>
             <div className="modal-foot">
               <button className="btn-ghost" onClick={() => setSmsOpen(false)}>
                 Bekor qilish
               </button>
-              <button
-                className="add-btn"
-                disabled={!smsMessage.trim()}
-                onClick={onSendSMS}
-              >
+              <button className="add-btn" disabled={!smsMessage.trim()} onClick={onSendSMS}>
                 Yuborish
               </button>
             </div>
