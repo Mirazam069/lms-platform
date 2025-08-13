@@ -15,12 +15,12 @@
   margin: 60px 50px 0 125px;
   font-family: 'Poppins', sans-serif;
   color: #111827;
-  font-size: 14px; /* ✅ barcha matnlar */
+  font-size: 14px;
 }
 
 /* Header */
 .al-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.al-title{ font-size: 1.5em; font-weight: 600; margin: 0; } /* ✅ katta yozuvlar */
+.al-title{ font-size: 1.5em; font-weight: 600; margin: 0; }
 .al-add-btn{
   display:inline-flex; align-items:center; gap:8px;
   border:none; border-radius:10px; cursor:pointer;
@@ -28,39 +28,33 @@
   background: var(--primary-color); color: var(--text-white);
   box-shadow: 0 8px 18px var(--hover-shadow);
   transition: transform .06s ease, box-shadow .2s;
-  font-family: "Poppins", sans-serif;
 }
 .al-add-btn:hover{ box-shadow: 0 10px 24px var(--hover-shadow); }
 .al-add-btn:active{ transform: translateY(1px); }
 
 /* Search bar (4 xil) */
 .al-search{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 ta teng ustun */
+  display:grid; grid-template-columns: repeat(4, 1fr);
   gap:10px; margin: 10px 0 14px 0;
 }
 .al-search input, .al-search select{
-  border:1px solid var(--border-color); border-radius:10px; background:#fff;
-  padding:10px 12px; font-size:14px; outline:none;
-  transition: box-shadow .15s ease, border-color .15s ease;
-  width: 25%;
-  font-family: "Poppins", sans-serif;
-    width: 100%;
+  width: 100%;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  font-size: 14px;
-  color: var(--text-gray);
-  background-color: var(--bg-light);
-  appearance: none; /* Brauzer default select uslubini olib tashlash */
+  border:1px solid var(--border-color); border-radius:10px;
+  font-size:14px; outline:none;
+  background: #fff;
+  transition: box-shadow .15s ease, border-color .15s ease;
   box-sizing: border-box;
+  color: #111827;
 }
+.al-search input::placeholder { color: var(--text-gray); }
+.al-search select:invalid { color: var(--text-gray); }
+.select-wrap{ position:relative; }
 .al-search input:focus, .al-search select:focus{
   border-color:#e1e5ea;
   box-shadow: 0 0 0 4px rgba(208,2,27,.08);
 }
-.select-wrap{ position:relative; }
 
 /* Columns grid */
 .al-columns{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
@@ -101,6 +95,7 @@
   border-radius:12px; background:#fff;
   box-shadow: 0 6px 14px var(--shadow-black);
 }
+.al-group.locked{ opacity: .9; }
 .al-group.ungrouped{ opacity: .98; }
 .al-group-head{
   display:flex; align-items:center; justify-content:space-between;
@@ -109,11 +104,18 @@
 }
 .al-group-head.subtle{ background:#fcfcfc; }
 .al-group-title{ font-weight:600; }
+.al-group-right{ display:flex; align-items:center; gap:8px; }
 .al-group-count{
   background: var(--text-light); border:1px solid var(--border-color);
   border-radius: 999px; padding: 2px 8px; font-size: 12px; color: var(--text-gray);
 }
+.al-lock{
+  width:32px; height:32px; display:grid; place-items:center;
+  border:1px solid var(--border-color); background:#fff; border-radius:8px; cursor:pointer;
+}
+.al-lock:hover{ box-shadow: 0 6px 14px var(--shadow-black); }
 .al-group-body{ padding: 10px; display:flex; flex-direction:column; gap:10px; }
+.al-group[aria-hidden="true"] .al-group-body{ display: none; }
 
 .al-empty{
   text-align:center; color: var(--text-gray);
@@ -196,12 +198,12 @@
   display:flex; align-items:center; justify-content:space-between;
   padding: 14px; border-bottom: 1px solid var(--border-color);
 }
-.al-drawer-head h2{ margin:0; font-size: 1.5em; } /* ✅ katta yozuvlar */
+.al-drawer-head h2{ margin:0; font-size: 1.5em; }
 .al-close{ background:none; border:none; cursor:pointer; color:#6b7280; font-size:16px; }
 .al-close:hover{ color: var(--primary-color); }
 .al-form{
   padding: 14px; display:flex; flex-direction:column; gap: 10px;
-  font-size:14px; /* ✅ */
+  font-size:14px;
 }
 .al-form label{ color:#374151; }
 .al-form input, .al-form textarea, .al-form select{
@@ -211,7 +213,6 @@
   padding:10px 12px;
   outline:none; transition: box-shadow .15s ease, border-color .15s ease;
   background:#fff;
-  font-family: "Poppins", sans-serif;
 }
 .al-form textarea{ resize: vertical; min-height: 96px; }
 .al-form input:focus, .al-form textarea:focus, .al-form select:focus{
@@ -230,6 +231,52 @@
 .al-save:hover{ box-shadow: 0 12px 26px var(--hover-shadow); }
 .al-save:active{ transform: translateY(1px); }
 
+/* Inline add (1-ustun pastida) */
+.al-inline-add{
+  margin-top: 6px;
+  background: transparent;
+}
+.al-inline-btn{
+  width:100%;
+  height:44px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background: #2f80ed; /* ko‘k — rasmdek */
+  color:#fff;
+  display:grid; place-items:center;
+  box-shadow: 0 10px 22px rgba(47,128,237,.25);
+  transition: transform .06s ease, box-shadow .2s;
+}
+.al-inline-btn:active{ transform: translateY(1px); }
+.al-inline-form{
+  display:grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap:8px;
+  background:#fff;
+  border:1px solid var(--border-color);
+  border-radius:10px;
+  padding:8px;
+  box-shadow: 0 10px 22px var(--shadow-black);
+}
+.al-inline-form input{
+  height:40px; padding:0 10px;
+  border:1px solid var(--border-color);
+  border-radius:8px; outline:none;
+}
+.al-inline-form input:focus{
+  border-color:#e1e5ea; box-shadow: 0 0 0 4px rgba(208,2,27,.08);
+}
+.al-inline-actions{ display:flex; align-items:center; gap:8px; }
+.al-inline-save{
+  background: var(--primary-color);
+  color:#fff; border:none; border-radius:8px; height:40px; padding:0 12px; cursor:pointer;
+  box-shadow: 0 8px 18px var(--hover-shadow);
+}
+.al-btn-ghost{
+  background:#fff; color:#111827; border:1px solid var(--border-color); border-radius:8px; height:40px; padding:0 12px; cursor:pointer;
+}
+
 /* SMS modal */
 .al-sms-modal{
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -239,10 +286,9 @@
   z-index: 1000; overflow:hidden;
 }
 .al-sms-head{
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 12px 14px; border-bottom:1px solid var(--border-color);
+  display:flex; align-items:center; justify-content:space-between; padding: 12px 14px; border-bottom:1px solid var(--border-color);
 }
-.al-sms-head h3{ margin:0; font-size: 1.5em; } /* ✅ katta yozuv */
+.al-sms-head h3{ margin:0; font-size: 1.5em; }
 .al-sms-body{ padding: 12px 14px; display:flex; flex-direction:column; gap:10px; }
 .al-sms-to{ color:#111827; }
 .al-sms-body textarea{
@@ -255,9 +301,6 @@
 .al-sms-foot{
   display:flex; justify-content:flex-end; gap:10px; padding: 12px 14px; border-top:1px solid var(--border-color);
 }
-.al-btn-ghost{
-  background:#fff; color:#111827; border:1px solid var(--border-color); border-radius:10px; padding:10px 14px; cursor:pointer;
-}
 
 /* Responsive */
 @media (max-width: 1100px){
@@ -266,4 +309,26 @@
 @media (max-width: 700px){
   .al-columns{ grid-template-columns: 1fr; }
   .active-leads{ width:auto; margin: 40px 16px; }
+}
+
+
+
+/* Qulflangan box ko'rinishi */
+.al-group.locked { opacity: .95; }
+
+.al-group-body.locked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 12px;
+  pointer-events: none;      /* ichida hech narsa bosilmasin */
+  background: #fff;
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 12px 12px;
+}
+
+.al-locked-msg {
+  font-size: 13px;
+  color: var(--text-gray);
 }

@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import "./ActiveLeads.css";
 import {
-  FaPlus, FaTimes, FaEllipsisV, FaEdit, FaSms, FaTrash
+  FaPlus, FaTimes, FaEllipsisV, FaEdit, FaSms, FaTrash,
+  FaUserPlus, FaLock, FaLockOpen
 } from "react-icons/fa";
 
 const STATUS = {
@@ -60,6 +61,18 @@ export default function ActiveLeads() {
     [STATUS.JOINED]: [],
   });
 
+  // Qulf holatlari: { statusKey: { groupName: true/false } }
+  const [locked, setLocked] = useState({
+    [STATUS.NEW]: {},
+    [STATUS.PENDING]: {},
+    [STATUS.REJECTED]: {},
+    [STATUS.JOINED]: {},
+  });
+
+  // Birinchi ustun pastidagi inline add form holati
+  const [inlineAddOpen, setInlineAddOpen] = useState(false);
+  const [inlineForm, setInlineForm] = useState({ name: "", phone: "" });
+
   // Drag & Drop holati
   const [draggingId, setDraggingId] = useState(null);
 
@@ -89,7 +102,9 @@ export default function ActiveLeads() {
   // Muayyan group(box) ichiga tashlash
   const onDropToGroup = (e, targetStatus, targetGroup) => {
     e.preventDefault();
-    e.stopPropagation(); // parent column drop ishga tushmasin (MUHIM)
+    e.stopPropagation(); // parent column drop ishga tushmasin
+    // Agar box qulflangan bo‘lsa — qabul qilmaydi
+    if (locked[targetStatus]?.[targetGroup]) return;
     const id = Number(e.dataTransfer.getData("text/plain"));
     if (!id) return;
     setLeads((prev) =>
@@ -98,9 +113,11 @@ export default function ActiveLeads() {
     setDraggingId(null);
   };
 
-  const onDragOverGroup = (e) => {
+  const onDragOverGroup = (e, statusKey, groupName) => {
+    // Qulf bo‘lsa qabul qilmasin
+    if (locked[statusKey]?.[groupName]) return;
     e.preventDefault();
-    e.stopPropagation(); // parentga bubblanish yo‘q (MUHIM)
+    e.stopPropagation();
   };
 
   // --- Drawer lead ---
@@ -167,6 +184,29 @@ export default function ActiveLeads() {
       );
     }
     closeDrawer();
+  };
+
+  // --- Inline add (1-ustun pastidagi) ---
+  const onInlineAdd = (e) => {
+    e.preventDefault();
+    const name = inlineForm.name.trim();
+    const phone = inlineForm.phone.trim();
+    if (!name || !phone) return;
+    const newId = leads.length ? Math.max(...leads.map((l) => l.id)) + 1 : 1;
+    const newLead = {
+      id: newId,
+      name,
+      phone,
+      course: "",
+      source: "",
+      comment: "",
+      status: STATUS.NEW,
+      createdAt: new Date().toISOString().slice(0, 10),
+      group: "",
+    };
+    setLeads((prev) => [newLead, ...prev]);
+    setInlineForm({ name: "", phone: "" });
+    setInlineAddOpen(false);
   };
 
   // --- Search filter ---
@@ -243,25 +283,63 @@ export default function ActiveLeads() {
     closeGroupPanel();
   };
 
-  // Group bo'yicha renderer
-  const renderGroupBox = (statusKey, groupName) => {
-    const list = columns[statusKey].filter((l) => (l.group || "") === groupName);
-    return (
-      <div
-        key={groupName || "_ungrouped"}
-        className={`al-group ${groupName ? "" : "ungrouped"}`}
-        onDragOver={groupName ? onDragOverGroup : onDragOver}
-        onDrop={(e) =>
-          groupName
-            ? onDropToGroup(e, statusKey, groupName) // stopPropagation bor
-            : onDropToColumn(e, statusKey)
-        }
-      >
-        <div className={`al-group-head ${groupName ? "" : "subtle"}`}>
-          <span className="al-group-title">{groupName || "Boshqa"}</span>
-          <span className="al-group-count">{list.length}</span>
-        </div>
+  // Qulfni almashtirish
+  const toggleLock = (statusKey, groupName) => {
+    setLocked((prev) => ({
+      ...prev,
+      [statusKey]: {
+        ...prev[statusKey],
+        [groupName]: !prev[statusKey]?.[groupName],
+      },
+    }));
+  };
 
+  const isLocked = (statusKey, groupName) => !!locked[statusKey]?.[groupName];
+
+  // Group bo'yicha renderer
+const renderGroupBox = (statusKey, groupName) => {
+  const list = columns[statusKey].filter((l) => (l.group || "") === groupName);
+  const lockedNow = groupName ? isLocked(statusKey, groupName) : false;
+
+    return (
+    <div
+      key={groupName || "_ungrouped"}
+      className={`al-group ${groupName ? "" : "ungrouped"} ${lockedNow ? "locked" : ""}`}
+      onDragOver={(e) =>
+        groupName
+          ? onDragOverGroup(e, statusKey, groupName) // ichkarida lock bo‘lsa o‘tkazmaydi
+          : onDragOver(e)
+      }
+      onDrop={(e) =>
+        groupName
+          ? onDropToGroup(e, statusKey, groupName)     // stopPropagation bor
+          : onDropToColumn(e, statusKey)
+      }
+    >
+      <div className={`al-group-head ${groupName ? "" : "subtle"}`}>
+        <span className="al-group-title">{groupName || "Boshqa"}</span>
+
+        <div className="al-group-right">
+          <span className="al-group-count">{list.length}</span>
+
+          {groupName ? (
+            <button
+              className="al-lock"
+              title={lockedNow ? "Qulfdan chiqarish" : "Qulflash (yopish)"}
+              onClick={() => toggleLock(statusKey, groupName)}
+            >
+              {lockedNow ? <FaLock /> : <FaLockOpen />}
+            </button>
+          ) : null}
+        </div>
+      </div>
+
+      {/* >>> LOCKED bo'lsa kartalar umuman render qilinmaydi */}
+      {lockedNow ? (
+        <div className="al-group-body locked" aria-hidden="true">
+          <div className="al-locked-msg">Box yopiq</div>
+        </div>
+      ) : (
         <div className="al-group-body">
           {list.length === 0 ? (
             <div className="al-empty small">Bu yerga tashlang</div>
@@ -275,10 +353,10 @@ export default function ActiveLeads() {
                 onDragEnd={() => setDraggingId(null)}
                 title="Kartani ushlab turib box yoki boshqa ustunga olib boring"
               >
-                {/* Kebab menu */}
                 <button className="al-kebab" onClick={() => onOpenMenu(l.id)}>
                   <FaEllipsisV />
                 </button>
+
                 {menuOpenId === l.id && (
                   <div className="al-menu" onMouseLeave={() => setMenuOpenId(null)}>
                     <button onClick={() => openDrawerEdit(l)}>
@@ -305,8 +383,10 @@ export default function ActiveLeads() {
             ))
           )}
         </div>
-      </div>
-    );
+      )}
+    </div>
+  );
+
   };
 
   return (
@@ -381,13 +461,52 @@ export default function ActiveLeads() {
                 >
                   <FaPlus />
                 </button>
+                
               </div>
+              
 
               <div className="al-col-body">
+                  {key === STATUS.NEW && (
+                  <div className="al-inline-add">
+                    {!inlineAddOpen ? (
+                      <button
+                        className="al-inline-btn"
+                        onClick={() => setInlineAddOpen(true)}
+                        title="Yangi lid qo‘shish"
+                      >
+                        <FaUserPlus />
+                      </button>
+                    ) : (
+                      <form className="al-inline-form" onSubmit={onInlineAdd}>
+                        <input
+                          type="text"
+                          placeholder="Ism"
+                          value={inlineForm.name}
+                          onChange={(e) => setInlineForm((p) => ({ ...p, name: e.target.value }))}
+                        />
+                        <input
+                          type="tel"
+                          placeholder="Telefon"
+                          value={inlineForm.phone}
+                          onChange={(e) => setInlineForm((p) => ({ ...p, phone: e.target.value }))}
+                        />
+                        <div className="al-inline-actions">
+                          <button type="button" className="al-btn-ghost" onClick={() => { setInlineForm({ name: "", phone: "" }); setInlineAddOpen(false); }}>
+                            Bekor
+                          </button>
+                          <button type="submit" className="al-inline-save">Qo‘shish</button>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+                )}
                 {/* Avval nomli box'lar */}
                 {colGroups.map((g) => renderGroupBox(key, g))}
                 {/* Oxirida "Boshqa" (ungrouped) */}
                 {renderGroupBox(key, "")}
+
+                {/* Faqat 1-ustunda (NEW) pastida ikkinchi qo‘shish zonasi */}
+              
               </div>
             </div>
           );
