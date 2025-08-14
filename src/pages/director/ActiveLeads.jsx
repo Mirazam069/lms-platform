@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import "./ActiveLeads.css";
 import {
-  FaPlus, FaTimes, FaEllipsisV, FaEdit, FaSms, FaTrash,
+  FaPlus, FaTimes, FaEllipsisV, FaEdit, FaSms, FaBars, FaTrash,
   FaUserPlus, FaLock, FaLockOpen
 } from "react-icons/fa";
 
@@ -459,7 +459,7 @@ const renderGroupBox = (statusKey, groupName) => {
                   title="Guruh (box) qo‘shish"
                   onClick={() => openGroupPanelFor(key)}
                 >
-                  <FaPlus />
+                  <FaBars />
                 </button>
                 
               </div>

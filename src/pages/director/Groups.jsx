@@ -1,273 +1,495 @@
 import React, { useMemo, useState } from "react";
 import "./Groups.css";
-import { FaPlus, FaEdit, FaTrash, FaSearch, FaSave, FaChevronDown } from "react-icons/fa";
+import { FaEllipsisV } from "react-icons/fa";
+
+/* ==== Demo ma'lumotlar ==== */
+const TEACHERS = ["Abbos shashoq", "Dilshod Bek", "Malika Karimova"];
+const COURSES = ["Ingliz tili", "Frontend", "React", "IELTS"];
+const DAYS = ["Odd days", "Even days", "Weekend days"];
+const ROOMS = ["A1", "A2", "B1", "B2"];
+const TAGS = ["New", "Intensive", "Morning", "Evening"];
 
 const initialGroups = [
   {
     id: 1,
-    name: "Frontend A-1",
-    teacher: "Javlon Bek",
-    startDate: "2025-09-01",
-    students: 18,
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "React Night",
-    teacher: "Dilnoza Karimova",
-    startDate: "2025-09-10",
-    students: 12,
-    status: "Inactive",
+    name: "A1",
+    course: "Ingliz tili",
+    teacher: "Abbos shashoq",
+    days: "Weekend days",
+    startDate: "2025-08-18",
+    endDate: "2026-08-18",
+    weekOfStudy: "not started",
+    room: "A2",
+    tags: ["New"],
+    students: 0,
+    status: "Active groups",
   },
 ];
 
-const emptyForm = {
-  id: null,
-  name: "",
-  teacher: "",
-  startDate: "",
-  students: "",
-  status: "Active",
-};
+/* Jadval ustunlari (Columns paneli) */
+const ALL_COLUMNS = [
+  { key: "name", label: "Group" },
+  { key: "course", label: "Course" },
+  { key: "teacher", label: "Teacher" },
+  { key: "days", label: "Days" },
+  { key: "trainingDates", label: "Training dates" }, // computed from start/end
+  { key: "weekOfStudy", label: "Week of study" },
+  { key: "room", label: "Room" },
+  { key: "tags", label: "Tags" },
+  { key: "students", label: "Students" },
+  { key: "actions", label: "Actions" }, // kebab
+];
 
 export default function Groups() {
+  /* ====== State ====== */
   const [groups, setGroups] = useState(initialGroups);
-  const [query, setQuery] = useState("");
-  const [formOpen, setFormOpen] = useState(true);
-  const [formMode, setFormMode] = useState("add"); // 'add' | 'edit'
-  const [form, setForm] = useState(emptyForm);
 
-  // Search by name/teacher
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return groups;
-    return groups.filter(
-      (g) =>
-        (g.name || "").toLowerCase().includes(q) ||
-        (g.teacher || "").toLowerCase().includes(q)
-    );
-  }, [groups, query]);
+  // Filtrlar
+  const [filters, setFilters] = useState({
+    status: "Active groups",
+    teacher: "",
+    course: "",
+    days: "",
+    tag: "",
+    startDate: "",
+    endDate: "",
+  });
 
-  const resetForm = () => setForm(emptyForm);
+  // Columns panel
+  const [showColumns, setShowColumns] = useState(false);
+  const [visibleCols, setVisibleCols] = useState(
+    ALL_COLUMNS.reduce((acc, c) => ({ ...acc, [c.key]: true }), {})
+  );
 
-  const openAdd = () => {
-    setFormMode("add");
-    resetForm();
-    setFormOpen(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // Add modal
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    course: "",
+    teacher: "",
+    days: "",
+    room: "",
+    lessonTime: "",
+    startDate: "",
+  });
 
-  const onEdit = (g) => {
-    setFormMode("edit");
-    setForm({
-      id: g.id,
-      name: g.name || "",
-      teacher: g.teacher || "",
-      startDate: g.startDate || "",
-      students: g.students ?? "",
-      status: g.status || "Active",
+  // Kebab (uch nuqta) menyu
+  const [kebabId, setKebabId] = useState(null);
+
+  /* ====== Helpers ====== */
+  const clearFilters = () =>
+    setFilters({
+      status: "Active groups",
+      teacher: "",
+      course: "",
+      days: "",
+      tag: "",
+      startDate: "",
+      endDate: "",
     });
-    setFormOpen(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
-  const onDelete = (id) => {
-    const g = groups.find((x) => x.id === id);
-    if (!g) return;
-    if (window.confirm(`"${g.name}" guruhini o‘chirishni tasdiqlaysizmi?`)) {
-      setGroups((prev) => prev.filter((x) => x.id !== id));
-    }
-  };
+  const filtered = useMemo(() => {
+    return groups.filter((g) => {
+      const okStatus = !filters.status || g.status === filters.status;
+      const okTeacher = !filters.teacher || g.teacher === filters.teacher;
+      const okCourse = !filters.course || g.course === filters.course;
+      const okDays = !filters.days || g.days === filters.days;
+      const okTag = !filters.tag || (g.tags || []).includes(filters.tag);
+      const okStart =
+        !filters.startDate || (g.startDate && g.startDate >= filters.startDate);
+      const okEnd =
+        !filters.endDate || (g.endDate && g.endDate <= filters.endDate);
 
-  const onSubmit = (e) => {
+      return okStatus && okTeacher && okCourse && okDays && okTag && okStart && okEnd;
+    });
+  }, [groups, filters]);
+
+  const onSubmitAdd = (e) => {
     e.preventDefault();
-    if (!form.name.trim()) return alert("Guruh nomi majburiy.");
-    if (!form.teacher.trim()) return alert("Ustoz nomi majburiy.");
-
-    if (formMode === "add") {
-      const newId = groups.length ? Math.max(...groups.map((x) => x.id)) + 1 : 1;
-      const newGroup = {
-        id: newId,
-        name: form.name.trim(),
-        teacher: form.teacher.trim(),
-        startDate: form.startDate || "",
-        students: Number(form.students) || 0,
-        status: form.status || "Active",
-      };
-      // TODO: API POST /groups
-      setGroups((prev) => [newGroup, ...prev]);
-      alert("Guruh qo‘shildi ✅");
-      resetForm();
-      setFormMode("add");
-    } else {
-      // TODO: API PUT /groups/{id}
-      setGroups((prev) =>
-        prev.map((x) =>
-          x.id === form.id
-            ? {
-                ...x,
-                name: form.name.trim(),
-                teacher: form.teacher.trim(),
-                startDate: form.startDate || "",
-                students: Number(form.students) || 0,
-                status: form.status || "Active",
-              }
-            : x
-        )
-      );
-      alert("Guruh tahrirlandi ✨");
+    if (!form.name.trim() || !form.course || !form.teacher) {
+      alert("Name, Course va Teacher majburiy.");
+      return;
     }
+    const id = groups.length ? Math.max(...groups.map((g) => g.id)) + 1 : 1;
+    const newItem = {
+      id,
+      name: form.name.trim(),
+      course: form.course,
+      teacher: form.teacher,
+      days: form.days,
+      startDate: form.startDate || "",
+      endDate: "",
+      weekOfStudy: "not started",
+      room: form.room || "",
+      tags: [],
+      students: 0,
+      status: "Active groups",
+    };
+    setGroups((prev) => [newItem, ...prev]);
+    setForm({
+      name: "",
+      course: "",
+      teacher: "",
+      days: "",
+      room: "",
+      lessonTime: "",
+      startDate: "",
+    });
+    setShowAdd(false);
   };
 
-  const onCancel = () => {
-    resetForm();
-    setFormMode("add");
-  };
-
+  /* ====== UI ====== */
   return (
     <div className="groups-page">
       {/* Header */}
-      <div className="groups-header">
-        <div className="groups-title">
-          <h1>Guruhlar</h1>
-          <span className="group-count">Miqdor — {groups.length} ta</span>
+      <div className="groups-head">
+        <div className="title-wrap">
+          <h1 className="title">Groups</h1>
+          <span className="qty">Quantity — {filtered.length}</span>
         </div>
 
-        <div className="header-buttons">
-          <div className="search-bar">
-            <FaSearch />
-            <input
-              type="text"
-              placeholder="Qidirish: guruh yoki ustoz..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-          <button className="add-btn" onClick={openAdd}>
-            <FaPlus /> Yangi guruh
-          </button>
+        <button className="add-btn" onClick={() => setShowAdd(true)}>
+          ADD NEW
+        </button>
+      </div>
+
+      {/* Filters */}
+      <div className="filters-row">
+        <div className="select">
+          <select
+            value={filters.status}
+            onChange={(e) => setFilters((p) => ({ ...p, status: e.target.value }))}
+          >
+            <option>Active groups</option>
+            <option>Archived</option>
+          </select>
+          <span className="chev">▾</span>
+        </div>
+
+        <div className="select">
+          <select
+            value={filters.teacher}
+            onChange={(e) => setFilters((p) => ({ ...p, teacher: e.target.value }))}
+          >
+            <option value="">Teachers</option>
+            {TEACHERS.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+          <span className="chev">▾</span>
+        </div>
+
+        <div className="select">
+          <select
+            value={filters.course}
+            onChange={(e) => setFilters((p) => ({ ...p, course: e.target.value }))}
+          >
+            <option value="">Courses</option>
+            {COURSES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+          <span className="chev">▾</span>
+        </div>
+
+        <div className="select">
+          <select
+            value={filters.days}
+            onChange={(e) => setFilters((p) => ({ ...p, days: e.target.value }))}
+          >
+            <option value="">Days</option>
+            {DAYS.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+          <span className="chev">▾</span>
+        </div>
+
+        <div className="select">
+          <select
+            value={filters.tag}
+            onChange={(e) => setFilters((p) => ({ ...p, tag: e.target.value }))}
+          >
+            <option value="">Tags</option>
+            {TAGS.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+          <span className="chev">▾</span>
+        </div>
+
+        <div className="input with-icon">
+          <span className="calendar">📅</span>
+          <input
+            type="date"
+            value={filters.startDate}
+            onChange={(e) => setFilters((p) => ({ ...p, startDate: e.target.value }))}
+            placeholder="Start date"
+          />
+        </div>
+
+        <div className="input with-icon">
+          <span className="calendar">📅</span>
+          <input
+            type="date"
+            value={filters.endDate}
+            onChange={(e) => setFilters((p) => ({ ...p, endDate: e.target.value }))}
+            placeholder="End date"
+          />
+        </div>
+
+        <button className="columns-btn" onClick={() => setShowColumns(true)}>
+          <span className="dots">▥</span> Columns
+        </button>
+
+        <button className="clear-btn" title="Clear filters" onClick={clearFilters}>
+          ×
+        </button>
+      </div>
+
+      {/* Table */}
+      <div className="table">
+        <div className="thead">
+          {ALL_COLUMNS.map((col) =>
+            visibleCols[col.key] ? (
+              <div className="th" key={col.key}>
+                {col.label}
+              </div>
+            ) : null
+          )}
+        </div>
+
+        <div className="tbody">
+          {filtered.length === 0 ? (
+            <div className="empty">No data</div>
+          ) : (
+            filtered.map((g) => {
+              const trainingDates = `${g.startDate || "—"}${
+                g.endDate ? " — " + g.endDate : ""
+              }`;
+              return (
+                <div className="tr" key={g.id}>
+                  {visibleCols.name && <div className="td name-cell">{g.name}</div>}
+                  {visibleCols.course && <div className="td">{g.course || "—"}</div>}
+                  {visibleCols.teacher && <div className="td">{g.teacher || "—"}</div>}
+                  {visibleCols.days && (
+                    <div className="td">
+                      {g.days || "—"}
+                      {g.days?.includes("Weekend") ? (
+                        <div className="sub">10:21</div>
+                      ) : null}
+                    </div>
+                  )}
+                  {visibleCols.trainingDates && (
+                    <div className="td">{trainingDates}</div>
+                  )}
+                  {visibleCols.weekOfStudy && (
+                    <div className="td">{g.weekOfStudy || "—"}</div>
+                  )}
+                  {visibleCols.room && <div className="td">{g.room || "—"}</div>}
+                  {visibleCols.tags && (
+                    <div className="td">
+                      {(g.tags || []).length ? g.tags.join(", ") : "—"}
+                    </div>
+                  )}
+                  {visibleCols.students && (
+                    <div className="td">{g.students ?? 0}</div>
+                  )}
+                  {visibleCols.actions && (
+                    <div className="td actions-cell">
+                      <button
+                        className="kebab"
+                        onClick={() =>
+                          setKebabId((prev) => (prev === g.id ? null : g.id))
+                        }
+                      >
+                        <FaEllipsisV />
+                      </button>
+
+                      {kebabId === g.id && (
+                        <div
+                          className="menu"
+                          onMouseLeave={() => setKebabId(null)}
+                        >
+                          <button onClick={() => alert("Edit " + g.name)}>
+                            Edit
+                          </button>
+                          <button onClick={() => alert("Archive " + g.name)}>
+                            Archive
+                          </button>
+                          <button
+                            className="danger"
+                            onClick={() => alert("Delete " + g.name)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 
-      {/* Add/Edit form */}
-      {formOpen && (
-        <div className="form-card">
-          <div className="form-header">
-            <h2>{formMode === "add" ? "Yangi guruh qo‘shish" : "Guruhni tahrirlash"}</h2>
+      {/* Columns panel */}
+      {showColumns && (
+        <div className="overlay" onClick={() => setShowColumns(false)} />
+      )}
+      <div className={`columns-panel ${showColumns ? "show" : ""}`}>
+        <div className="panel-head">
+          <h3>Columns</h3>
+          <button className="close" onClick={() => setShowColumns(false)}>
+            ×
+          </button>
+        </div>
+        <div className="panel-body">
+          {ALL_COLUMNS.map((c) => (
+            <label key={c.key} className="col-item">
+              <input
+                type="checkbox"
+                checked={visibleCols[c.key]}
+                onChange={(e) =>
+                  setVisibleCols((p) => ({ ...p, [c.key]: e.target.checked }))
+                }
+              />
+              <span>{c.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Add new modal (drawer) */}
+      {showAdd && <div className="overlay" onClick={() => setShowAdd(false)} />}
+      <div className={`add-modal ${showAdd ? "show" : ""}`}>
+        <div className="modal-head">
+          <h3>Add New Group</h3>
+          <button className="close" onClick={() => setShowAdd(false)}>
+            ×
+          </button>
+        </div>
+
+        <form
+          className="modal-body"
+          onSubmit={onSubmitAdd}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <label>Name</label>
+          <input
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+            placeholder="Group name"
+          />
+
+          <label>Select course</label>
+          <div className="select">
+            <select
+              value={form.course}
+              onChange={(e) => setForm((p) => ({ ...p, course: e.target.value }))}
+            >
+              <option value="">Select options</option>
+              {COURSES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+            <span className="chev">▾</span>
           </div>
 
-          <form onSubmit={onSubmit} className="form-grid">
-            <div className="field">
-              <label>Guruh nomi</label>
-              <div className="input">
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="Masalan: Frontend A-1"
-                />
-              </div>
-            </div>
+          <label>Select teacher</label>
+          <div className="select">
+            <select
+              value={form.teacher}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, teacher: e.target.value }))
+              }
+            >
+              <option value="">Select options</option>
+              {TEACHERS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+            <span className="chev">▾</span>
+          </div>
 
-            <div className="field">
-              <label>Ustoz</label>
-              <div className="input">
-                <input
-                  type="text"
-                  value={form.teacher}
-                  onChange={(e) => setForm((p) => ({ ...p, teacher: e.target.value }))}
-                  placeholder="Masalan: Javlon Bek"
-                />
-              </div>
-            </div>
+          <label>Days</label>
+          <div className="select">
+            <select
+              value={form.days}
+              onChange={(e) => setForm((p) => ({ ...p, days: e.target.value }))}
+            >
+              <option value="">Select options</option>
+              {DAYS.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+            <span className="chev">▾</span>
+          </div>
 
-            <div className="field">
-              <label>Boshlanish sanasi</label>
-              <div className="input">
-                <input
-                  type="date"
-                  value={form.startDate}
-                  onChange={(e) => setForm((p) => ({ ...p, startDate: e.target.value }))}
-                />
-              </div>
-            </div>
+          <label>Select room</label>
+          <div className="select">
+            <select
+              value={form.room}
+              onChange={(e) => setForm((p) => ({ ...p, room: e.target.value }))}
+            >
+              <option value="">Select options</option>
+              {ROOMS.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+            <span className="chev">▾</span>
+          </div>
 
-            <div className="field">
-              <label>Talabalar soni</label>
-              <div className="input">
-                <input
-                  type="number"
-                  min="0"
-                  value={form.students}
-                  onChange={(e) => setForm((p) => ({ ...p, students: e.target.value }))}
-                  placeholder="18"
-                />
-              </div>
-            </div>
+          <label>Lesson start time</label>
+          <div className="input with-icon">
+            <span className="clock">🕘</span>
+            <input
+              type="time"
+              value={form.lessonTime}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, lessonTime: e.target.value }))
+              }
+              placeholder="No time selected"
+            />
+          </div>
 
-            <div className="field">
-              <label>Status</label>
-              <div className="select">
-                <select
-                  value={form.status}
-                  onChange={(e) => setForm((p) => ({ ...p, status: e.target.value }))}
-                >
-                  <option>Active</option>
-                  <option>Inactive</option>
-                </select>
-                <FaChevronDown className="chev" />
-              </div>
-            </div>
+          <label>Group start date</label>
+          <div className="input with-icon">
+            <span className="calendar">📅</span>
+            <input
+              type="date"
+              value={form.startDate}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, startDate: e.target.value }))
+              }
+              placeholder="No date selected"
+            />
+          </div>
 
-            <div className="actions-row">
-              <button className="add-btn" type="submit">
-                <FaSave />
-                {formMode === "add" ? "Saqlash" : "O‘zgartirishni saqlash"}
-              </button>
-              <button type="button" className="btn-ghost" onClick={onCancel}>
-                Bekor qilish
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* List */}
-      <div className="groups-list">
-        <div className="groups-list-head">
-          <div className="c">Guruh</div>
-          <div className="c">Ustoz</div>
-          <div className="c">Boshlanish</div>
-          <div className="c">Talabalar</div>
-          <div className="c">Status</div>
-          <div className="c">Amallar</div>
-        </div>
-
-        {filtered.length === 0 ? (
-          <div className="empty">Ko‘rsatiladigan ma’lumotlar yo‘q</div>
-        ) : (
-          filtered.map((g) => (
-            <div className="group-row" key={g.id}>
-              <div className="c">{g.name}</div>
-              <div className="c">{g.teacher}</div>
-              <div className="c">{g.startDate || "-"}</div>
-              <div className="c">{g.students}</div>
-              <div className={`c status ${g.status === "Active" ? "st-active" : "st-inactive"}`}>
-                {g.status}
-              </div>
-              <div className="c">
-                <div className="actions-inline">
-                  <button className="mini-btn" title="Tahrirlash" onClick={() => onEdit(g)}>
-                    <FaEdit />
-                  </button>
-                  <button className="mini-btn" title="O‘chirish" onClick={() => onDelete(g.id)}>
-                    <FaTrash />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
+          <div className="modal-foot">
+            <button type="submit" className="submit-btn">
+              Submit
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -28,6 +28,7 @@
   background: var(--primary-color); color: var(--text-white);
   box-shadow: 0 8px 18px var(--hover-shadow);
   transition: transform .06s ease, box-shadow .2s;
+  font-family: 'Poppins', sans-serif;
 }
 .al-add-btn:hover{ box-shadow: 0 10px 24px var(--hover-shadow); }
 .al-add-btn:active{ transform: translateY(1px); }
@@ -47,6 +48,7 @@
   transition: box-shadow .15s ease, border-color .15s ease;
   box-sizing: border-box;
   color: #111827;
+  font-family: 'Poppins', sans-serif;
 }
 .al-search input::placeholder { color: var(--text-gray); }
 .al-search select:invalid { color: var(--text-gray); }
@@ -185,7 +187,7 @@
 .al-menu .danger{ color: var(--primary-color); }
 
 /* Drawer umumiy */
-.al-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,.25); z-index: 998; }
+.al-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,.25); z-index: 99999; }
 .al-drawer{
   position: fixed; top: 0; right: 0; height: 100vh; width: 380px;
   background: #fff; border-left: 1px solid var(--border-color);
@@ -193,10 +195,10 @@
   transform: translateX(100%); transition: transform .35s ease;
   z-index: 999; display:flex; flex-direction:column;
 }
-.al-drawer.show{ transform: translateX(0); }
+.al-drawer.show{ transform: translateX(0); z-index: 99999;}
 .al-drawer-head{
   display:flex; align-items:center; justify-content:space-between;
-  padding: 14px; border-bottom: 1px solid var(--border-color);
+  padding: 14px; border-bottom: 2px solid var(--border-color);
 }
 .al-drawer-head h2{ margin:0; font-size: 1.5em; }
 .al-close{ background:none; border:none; cursor:pointer; color:#6b7280; font-size:16px; }
@@ -213,6 +215,7 @@
   padding:10px 12px;
   outline:none; transition: box-shadow .15s ease, border-color .15s ease;
   background:#fff;
+  font-family: 'Poppins', sans-serif;
 }
 .al-form textarea{ resize: vertical; min-height: 96px; }
 .al-form input:focus, .al-form textarea:focus, .al-form select:focus{
@@ -227,6 +230,7 @@
   padding: 10px 14px; font-size:14px; cursor:pointer;
   box-shadow: 0 10px 22px var(--hover-shadow);
   transition: transform .06s ease, box-shadow .2s;
+  font-family: 'Poppins', sans-serif;
 }
 .al-save:hover{ box-shadow: 0 12px 26px var(--hover-shadow); }
 .al-save:active{ transform: translateY(1px); }
@@ -263,15 +267,20 @@
   height:40px; padding:0 10px;
   border:1px solid var(--border-color);
   border-radius:8px; outline:none;
+  font-family: 'Poppins', sans-serif;
 }
 .al-inline-form input:focus{
   border-color:#e1e5ea; box-shadow: 0 0 0 4px rgba(208,2,27,.08);
 }
 .al-inline-actions{ display:flex; align-items:center; gap:8px; }
+.al-inline-actions button{
+  font-family: 'Poppins', sans-serif;
+}
 .al-inline-save{
   background: var(--primary-color);
   color:#fff; border:none; border-radius:8px; height:40px; padding:0 12px; cursor:pointer;
   box-shadow: 0 8px 18px var(--hover-shadow);
+  font-family: 'Poppins', sans-serif;
 }
 .al-btn-ghost{
   background:#fff; color:#111827; border:1px solid var(--border-color); border-radius:8px; height:40px; padding:0 12px; cursor:pointer;
@@ -331,4 +340,174 @@
 .al-locked-msg {
   font-size: 13px;
   color: var(--text-gray);
+}
+
+
+/* ===========================
+   RESPONSIVE / MEDIA QUERIES
+   =========================== */
+
+/* Katta planshetlar (≤ 1200px) */
+@media (max-width: 1200px) {
+  .active-leads{
+    width: auto;
+    margin: 40px 24px 24px 24px; /* yonlar torayadi */
+  }
+  .al-columns{
+    grid-template-columns: 1fr 1fr;   /* 4 → 2 ustun */
+    gap: 12px;
+  }
+  .al-search{
+    grid-template-columns: 1fr 1fr;   /* qidiruv ham 2 qatorda */
+    gap: 8px 12px;
+  }
+  .al-drawer{ width: 420px; }         /* biroz kengroq drawer OK */
+}
+
+/* Planshetlar (≤ 992px) */
+@media (max-width: 992px) {
+  .active-leads{
+    margin: 32px 16px;
+  }
+  .al-head{ gap: 8px; }
+  .al-title{ font-size: 1.35em; }
+  .al-add-btn{ padding: 9px 12px; }
+
+  .al-columns{
+    grid-template-columns: 1fr 1fr;   /* 2 ustun saqlaymiz */
+    gap: 10px;
+  }
+  .al-col{ min-height: 240px; }
+  .al-col-head{ padding: 10px; }
+
+  .al-search{
+    grid-template-columns: 1fr;       /* 1 ustunli search */
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .al-search input,
+  .al-search select{
+    height: 38px;
+    font-size: 14px;
+  }
+
+  .al-drawer{ width: 360px; }
+}
+
+/* Kichik planshet / katta telefon (≤ 768px) */
+@media (max-width: 768px) {
+  .active-leads{
+    margin: 24px 14px;
+    font-size: 13.5px;                /* matn biroz ixcham */
+  }
+
+  .al-head{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .al-add-btn{ width: 100%; }
+
+  .al-columns{
+    grid-template-columns: 1fr;       /* 1 ustun */
+    gap: 12px;
+  }
+
+  .al-col-body{ padding: 10px; gap: 10px; }
+
+  /* Karta touch-friendly */
+  .al-card{
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px var(--shadow-black);
+  }
+  .al-kebab{ width: 28px; height: 28px; }
+
+  /* Inline add form (1-ustun pastidagi) */
+  .al-inline-form{
+    grid-template-columns: 1fr;
+  }
+  .al-inline-actions{
+    justify-content: flex-end;
+  }
+
+  /* Drawer to‘liq ekran */
+  .al-drawer{
+    width: 100vw;
+    max-width: 100vw;
+  }
+  .al-drawer-head h2{ font-size: 1.3em; }
+}
+
+/* Telefonlar (≤ 600px) */
+@media (max-width: 600px) {
+  .active-leads{
+    margin: 20px 12px;
+  }
+  .al-title{ font-size: 1.25em; }
+
+  .al-group-head{
+    padding: 8px 10px;
+  }
+  .al-group-body{ padding: 8px; gap: 8px; }
+  .al-chip{ padding: 2px 6px; font-size: 12px; }
+
+  .al-menu{ min-width: 160px; }       /* kebab menyu tor ekranda */
+  .al-sms-modal{
+    width: 94vw;
+  }
+}
+
+/* Kichik telefonlar (≤ 480px) */
+@media (max-width: 480px) {
+  .active-leads{
+    margin: 16px 10px;
+  }
+  .al-title{ font-size: 1.2em; }
+
+  .al-col{ border-radius: 10px; }
+  .al-col-head{
+    padding: 8px;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .al-search input,
+  .al-search select{
+    height: 36px;
+    font-size: 13px;
+    padding: 0 10px;
+  }
+
+  .al-inline-btn{ height: 42px; border-radius: 8px; }
+  .al-inline-form{
+    padding: 8px;
+    border-radius: 8px;
+  }
+  .al-inline-save,
+  .al-btn-ghost{
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  .al-save, .al-add-btn{
+    padding: 9px 12px;
+    border-radius: 8px;
+  }
+}
+
+/* iOS safe-area (iPhone X va hokazo) */
+@supports (padding: max(0px)) {
+  .al-drawer{
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Touch optimizatsiya: skroll, tasodifiy zoom va tanlashni kamaytirish */
+@media (max-width: 768px){
+  .al-card, .al-col, .al-group, .al-inline-btn, .al-add-btn{
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  /* Drag bilan scroll to‘qnashmasin */
+  .al-group-body{ touch-action: pan-y; }
 }
