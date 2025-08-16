@@ -1,513 +1,418 @@
-:root {
-  --primary-color: #d0021b;
-  --primary-dark: #730014;
-  --text-white: #ffffff;
-  --text-light: #f9fafb;
-  --text-gray: #6b7280;
-  --border-color: #e5e7eb;
-  --shadow-black: rgba(0, 0, 0, 0.06);
-  --hover-shadow: rgba(208, 2, 27, 0.2);
-  --bg-light: #fefefe;
+/***********************
+ * ActiveLeads — CSS
+ ***********************/
+:root{
+  --brand: #d0021b;
+  --brand-500: #e43b4c;
+  --bg: #ffffff;
+  --bg-soft: #f7f9fc;
+  --ink: #0f1b2d;
+  --muted: #6b7280;
+  --border: #e7eaf0;
+  --shadow: 0 6px 14px rgba(0,0,0,.06);
+  --shadow-lg: 0 18px 40px rgba(0,0,0,.08);
+  --brand-shadow: 0 10px 22px rgba(208,2,27,.22);
+  --col-gap: 14px;
 }
 
+/* ---------- Global font inherit ---------- */
+.active-leads, .active-leads *{
+  font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  
+}
+.active-leads button,
+.active-leads input,
+.active-leads select,
+.active-leads textarea{ font: inherit; }
+
+/* ---------- Layout ---------- */
 .active-leads{
-  width: 1330px;
-  margin: 60px 50px 0 125px;
-  font-family: 'Poppins', sans-serif;
-  color: #111827;
+  margin: 28px 24px;
+  color: var(--ink);
   font-size: 14px;
+  width: 1330px;  margin: 60px 50px 0 125px; 
 }
 
-/* Header */
-.al-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.al-title{ font-size: 1.5em; font-weight: 600; margin: 0; }
+/* ---------- Header ---------- */
+.al-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.al-title{margin:0;font-size:22px;font-weight:700}
+.al-head-actions{display:flex;align-items:center;gap:8px}
 .al-add-btn{
-  display:inline-flex; align-items:center; gap:8px;
-  border:none; border-radius:10px; cursor:pointer;
-  padding:10px 14px; font-size:14px;
-  background: var(--primary-color); color: var(--text-white);
-  box-shadow: 0 8px 18px var(--hover-shadow);
-  transition: transform .06s ease, box-shadow .2s;
-  font-family: 'Poppins', sans-serif;
+  display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border:0;border-radius:10px;cursor:pointer;
+  color:#fff;background:var(--brand);box-shadow:var(--brand-shadow);
+  transition:transform .06s ease, box-shadow .2s ease;
 }
-.al-add-btn:hover{ box-shadow: 0 10px 24px var(--hover-shadow); }
-.al-add-btn:active{ transform: translateY(1px); }
+.al-add-btn:hover{box-shadow:0 12px 26px rgba(208,2,27,.28)}
+.al-add-btn:active{transform:translateY(1px)}
 
-/* Search bar (4 xil) */
+.al-kebab-wrap{position:relative}
+.al-head-kebab{
+  width:40px;height:40px;border:1px solid var(--border);border-radius:10px;background:#fff;
+  display:grid;place-items:center;cursor:pointer
+}
+.al-head-menu{
+  position:absolute;right:0;top:46px;min-width:210px;padding:6px;z-index:1001;
+  background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);
+  display:flex;flex-direction:column
+}
+.al-head-menu button{
+  background:#fff;border:0;text-align:left;padding:10px 12px;cursor:pointer;font-size:14px;
+  display:flex;align-items:center;gap:8px;color:var(--ink)
+}
+.al-head-menu button:hover{background:var(--bg-soft)}
+
+/* ---------- Search ---------- */
 .al-search{
-  display:grid; grid-template-columns: repeat(4, 1fr);
-  gap:10px; margin: 10px 0 14px 0;
+  display:grid;grid-template-columns:repeat(9,1fr) 44px;gap:8px;margin:10px 0 14px;
 }
-.al-search input, .al-search select{
-  width: 100%;
-  height: 40px;
-  padding: 0 12px;
-  border:1px solid var(--border-color); border-radius:10px;
-  font-size:14px; outline:none;
-  background: #fff;
-  transition: box-shadow .15s ease, border-color .15s ease;
-  box-sizing: border-box;
-  color: #111827;
-  font-family: 'Poppins', sans-serif;
+.al-search input,.al-search select{
+  height:38px;width:100%;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:#fff;
+  outline:0;transition:box-shadow .15s,border-color .15s;color:var(--ink)
 }
-.al-search input::placeholder { color: var(--text-gray); }
-.al-search select:invalid { color: var(--text-gray); }
-.select-wrap{ position:relative; }
-.al-search input:focus, .al-search select:focus{
-  border-color:#e1e5ea;
-  box-shadow: 0 0 0 4px rgba(208,2,27,.08);
+.al-search input::placeholder{color:var(--muted)}
+.al-search input:focus,.al-search select:focus{
+  border-color:#e1e5ea;box-shadow:0 0 0 4px rgba(208,2,27,.08)
+}
+.al-reset{
+  height:38px;border:1px solid var(--border);background:#fff;border-radius:10px;display:grid;place-items:center;cursor:pointer;
+}
+.al-reset:hover{box-shadow:var(--shadow)}
+
+/* =========================================================
+   Columns — ALWAYS show 4 per view, horizontal scroll
+   ========================================================= */
+.al-columns{
+  position:relative;display:flex;flex-wrap:nowrap;gap:var(--col-gap);
+  overflow-x:auto;overflow-y:hidden;padding-bottom:6px;scrollbar-gutter:stable both-edges;
+  height: calc(100vh - 220px);
 }
 
-/* Columns grid */
-.al-columns{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-
-/* Column */
+/* 4 ta ko‘rinsin: (100% - 3*gap) / 4 */
 .al-col{
-  background: var(--bg-light);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: 0 10px 25px var(--shadow-black);
-  display:flex; flex-direction:column; min-height: 280px;
+  flex: 0 0 calc((100% - (3 * var(--col-gap))) / 4);
+  min-width: 280px;
+  background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;min-height:280px;position:relative;
 }
+
+/* Drag highlight — barcha kolonka chetlarida ko‘k chiziq */
+.al-columns.dragging .al-col::after{
+  content:"";position:absolute;inset:0;border:2px dashed #3ea0ff;border-radius:12px;pointer-events:none;
+  animation: alPulse 1.2s ease-in-out infinite;
+}
+@keyframes alPulse{
+  0%{ box-shadow: 0 0 0 0 rgba(62,160,255,.25); }
+  70%{ box-shadow: 0 0 0 8px rgba(62,160,255,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(62,160,255,0); }
+}
+
+/* Column head */
 .al-col-head{
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 12px; border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(180deg, #fff, #fdfdfd);
-  border-radius: 12px 12px 0 0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px;border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,#fff,#fdfdfd);border-radius:12px 12px 0 0
 }
-.al-col-head .left{ display:flex; align-items:center; gap:8px; }
-.al-col-title{ font-weight:600; }
+.al-col-head .left{display:flex;align-items:center;gap:8px}
+.al-col-title{font-weight:600}
 .al-col-count{
-  background: var(--text-light);
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  padding: 2px 8px; font-size: 12px; color: var(--text-gray);
+  padding:2px 8px;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px;background:#f7f9fb
 }
-.al-col-plus{
-  width:34px; height:34px; display:grid; place-items:center; cursor:pointer;
-  border:1px solid var(--border-color); border-radius:8px; background:#fff; color:#111827;
+.al-col-plus,.al-col-lock,.al-col-kebab{
+  width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--border);
+  background:#fff;border-radius:8px;color:var(--ink);cursor:pointer
 }
-.al-col-plus:hover{ box-shadow: 0 8px 18px var(--shadow-black); }
+.al-col-plus:hover,.al-col-lock:hover,.al-col-kebab:hover{box-shadow:var(--shadow)}
+.right{display:flex;align-items:center;gap:6px}
+.al-col-body{padding:12px;display:flex;flex-direction:column;gap:10px}
 
-.al-col-body{ padding: 12px; display:flex; flex-direction:column; gap:12px; }
-
-/* Group box */
-.al-group{
-  border:1px solid var(--border-color);
-  border-radius:12px; background:#fff;
-  box-shadow: 0 6px 14px var(--shadow-black);
+/* ---------- Inline add (only first column) ---------- */
+.al-inline-add{padding:12px;padding-bottom:0}
+.al-inline-toggle{
+  width:100%;height:44px;border:0;border-radius:10px;cursor:pointer;color:#fff;
+  background:#2ea0ff;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 22px rgba(46,160,255,.25);transition:transform .06s, box-shadow .2s
 }
-.al-group.locked{ opacity: .9; }
-.al-group.ungrouped{ opacity: .98; }
-.al-group-head{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:10px 12px; border-bottom:1px solid var(--border-color);
-  border-radius:12px 12px 0 0; background:#fff;
-}
-.al-group-head.subtle{ background:#fcfcfc; }
-.al-group-title{ font-weight:600; }
-.al-group-right{ display:flex; align-items:center; gap:8px; }
-.al-group-count{
-  background: var(--text-light); border:1px solid var(--border-color);
-  border-radius: 999px; padding: 2px 8px; font-size: 12px; color: var(--text-gray);
-}
-.al-lock{
-  width:32px; height:32px; display:grid; place-items:center;
-  border:1px solid var(--border-color); background:#fff; border-radius:8px; cursor:pointer;
-}
-.al-lock:hover{ box-shadow: 0 6px 14px var(--shadow-black); }
-.al-group-body{ padding: 10px; display:flex; flex-direction:column; gap:10px; }
-.al-group[aria-hidden="true"] .al-group-body{ display: none; }
-
-.al-empty{
-  text-align:center; color: var(--text-gray);
-  background: #fff; border: 1px dashed var(--border-color);
-  padding: 14px; border-radius: 10px;
-}
-.al-empty.small{ padding:10px; font-size:12px; }
-
-/* Card */
-.al-card{
-  position:relative;
-  background:#fff;
-  border:1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 10px 12px;
-  box-shadow: 0 6px 14px var(--shadow-black);
-  cursor: grab;
-  transition: transform .08s ease, box-shadow .2s, border-color .2s;
-}
-.al-card:active{ cursor: grabbing; }
-.al-card:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px var(--shadow-black);
-  border-color: #e3e6ea;
-}
-.al-card.dragging{
-  opacity: .7;
-  border-color: var(--primary-color);
-  box-shadow: 0 10px 22px var(--hover-shadow);
-}
-.al-card-name{ font-weight:600; margin-bottom:4px; }
-.al-card-phone{ color:#374151; margin-bottom:6px; }
-.al-meta{
-  display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;
-}
-.al-chip{
-  border: 1px solid var(--border-color);
-  background: var(--text-light);
-  padding: 2px 8px; border-radius: 999px; font-size: 12px; color: #374151;
-}
-.al-date{ font-size:12px; color: var(--text-gray); }
-.al-comment{
-  background:#fff8f8;
-  border:1px solid #ffe0e4;
-  padding:8px; border-radius:8px; color:#4b5563;
-}
-
-/* Kebab (3 nuqta) va menyu */
-.al-kebab{
-  position:absolute; top:6px; right:6px;
-  width:32px; height:32px; display:grid; place-items:center;
-  background:#fff; border:1px solid var(--border-color); border-radius:8px; cursor:pointer;
-}
-.al-kebab:hover{ box-shadow: 0 8px 18px var(--shadow-black); }
-
-.al-menu{
-  position:absolute; top:42px; right:6px;
-  background:#fff; border:1px solid var(--border-color); border-radius:10px;
-  box-shadow: 0 12px 24px var(--shadow-black);
-  overflow:hidden; display:flex; flex-direction:column; min-width:170px; z-index: 3;
-}
-.al-menu button{
-  display:flex; align-items:center; gap:8px;
-  background:#fff; border:none; text-align:left; padding:10px 12px; font-size:14px; cursor:pointer; color:#111827;
-}
-.al-menu button:hover{ background: var(--text-light); }
-.al-menu .danger{ color: var(--primary-color); }
-
-/* Drawer umumiy */
-.al-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,.25); z-index: 99999; }
-.al-drawer{
-  position: fixed; top: 0; right: 0; height: 100vh; width: 380px;
-  background: #fff; border-left: 1px solid var(--border-color);
-  box-shadow: -10px 0 28px var(--shadow-black);
-  transform: translateX(100%); transition: transform .35s ease;
-  z-index: 999; display:flex; flex-direction:column;
-}
-.al-drawer.show{ transform: translateX(0); z-index: 99999;}
-.al-drawer-head{
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 14px; border-bottom: 2px solid var(--border-color);
-}
-.al-drawer-head h2{ margin:0; font-size: 1.5em; }
-.al-close{ background:none; border:none; cursor:pointer; color:#6b7280; font-size:16px; }
-.al-close:hover{ color: var(--primary-color); }
-.al-form{
-  padding: 14px; display:flex; flex-direction:column; gap: 10px;
-  font-size:14px;
-}
-.al-form label{ color:#374151; }
-.al-form input, .al-form textarea, .al-form select{
-  font-size:14px;
-  border:1px solid var(--border-color);
-  border-radius:10px;
-  padding:10px 12px;
-  outline:none; transition: box-shadow .15s ease, border-color .15s ease;
-  background:#fff;
-  font-family: 'Poppins', sans-serif;
-}
-.al-form textarea{ resize: vertical; min-height: 96px; }
-.al-form input:focus, .al-form textarea:focus, .al-form select:focus{
-  border-color:#e1e5ea; box-shadow: 0 0 0 4px rgba(208,2,27,.08);
-}
-.req{ color: var(--primary-color); }
-.al-save{
-  margin-top:6px;
-  background: var(--primary-color);
-  color: var(--text-white);
-  border:none; border-radius: 10px;
-  padding: 10px 14px; font-size:14px; cursor:pointer;
-  box-shadow: 0 10px 22px var(--hover-shadow);
-  transition: transform .06s ease, box-shadow .2s;
-  font-family: 'Poppins', sans-serif;
-}
-.al-save:hover{ box-shadow: 0 12px 26px var(--hover-shadow); }
-.al-save:active{ transform: translateY(1px); }
-
-/* Inline add (1-ustun pastida) */
-.al-inline-add{
-  margin-top: 6px;
-  background: transparent;
-}
-.al-inline-btn{
-  width:100%;
-  height:44px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  background: #2f80ed; /* ko‘k — rasmdek */
-  color:#fff;
-  display:grid; place-items:center;
-  box-shadow: 0 10px 22px rgba(47,128,237,.25);
-  transition: transform .06s ease, box-shadow .2s;
-}
-.al-inline-btn:active{ transform: translateY(1px); }
+.al-inline-toggle.open{background:#1d8ff0}
+.al-inline-toggle:active{transform:translateY(1px)}
 .al-inline-form{
-  display:grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap:8px;
+  margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff;
+  display:flex;flex-direction:column;gap:8px
+}
+.al-inline-form .row{display:flex; flex-direction: column; grid-template-columns:1fr 1fr;gap:8px}
+.al-inline-form input,.al-inline-form select,.al-inline-form textarea{
+  font-size:14px;border:1px solid var(--border);border-radius:10px;padding:8px 10px;outline:0
+}
+.al-inline-form textarea{min-height:60px;resize:vertical}
+
+/* ---------- Group (Box) ---------- */
+.al-group{border:1px solid var(--border);border-radius:12px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.04)}
+.al-group.locked{opacity:.95}
+.al-group.ungrouped{opacity:.98}
+.al-group-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-bottom:1px solid var(--border);border-radius:12px 12px 0 0;background:#fff
+}
+.al-group-head.subtle{background:#fcfcfc}
+.al-group-left{display:flex;align-items:center;gap:8px}
+.al-group-title{font-weight:600}
+.al-group-count{
+  padding:2px 8px;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px;background:#f7f9fb
+}
+.al-group-right{display:flex;align-items:center;gap:6px}
+.al-box-menu{right:0;top:40px;min-width:210px}
+
+.al-group-body{padding:10px;display:flex;flex-direction:column;gap:10px}
+.al-group-body.locked{
+  display:flex;align-items:center;justify-content:center;min-height:56px;padding:12px;pointer-events:none;
+  background:#fff;border-top:1px solid var(--border);border-radius:0 0 12px 12px
+}
+.al-locked-msg{font-size:13px;color:var(--muted)}
+.al-empty{
+  text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--border);
+  padding:14px;border-radius:10px
+}
+.al-empty.small{padding:10px;font-size:12px}
+
+/* ---------- Card (COMPACT minimal) ---------- */
+.al-card{
+  position:relative;background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;box-shadow:0 6px 14px rgba(0,0,0,.04);
+  transition:transform .08s, box-shadow .2s, border-color .2s
+}
+.al-card:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.06);border-color:#e3e6ea}
+.al-card.dragging{opacity:.7;border-color:#3ea0ff;box-shadow:0 10px 22px rgba(62,160,255,.28)}
+
+.al-card.compact{display:flex;flex-direction: column; cursor:grab}
+.al-card:active{cursor:grabbing}
+
+.al-card-left{display:flex;align-items:center;gap:10px;min-width:0}
+.al-avatar{
+  width:32px;height:32px;border-radius:999px;background:#eef2f7;color:#1a315a;
+  display:grid;place-items:center;font-weight:600;font-size:13px;flex:0 0 32px
+}
+.al-card-main{min-width:0}
+.al-card-name{font-weight:600;line-height:1.1}
+.al-card-phone{color:#263a59;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.al-card-right{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;position:relative}
+.al-ico{
+  width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--border);
+  background:#fff;border-radius:8px;color:#0f274b;cursor:pointer
+}
+.al-ico:hover{box-shadow:var(--shadow)}
+.al-time{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#0f274b;white-space:nowrap}
+
+/* Info popover */
+.al-ico-wrap{position:relative}
+.al-info-pop{
+  position:absolute;right:36px;top:38px;min-width:240px;background:#fff;border:1px solid var(--border);
+  border-radius:12px;box-shadow:var(--shadow-lg);padding:12px;z-index:5
+}
+.al-info-title{font-weight:700;margin-bottom:8px}
+.al-info-row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed #eef1f5}
+.al-info-row:last-child{border-bottom:0}
+.al-info-row .lbl{color:#74809a}
+.al-info-row .val{font-weight:600;color:#0f1b2d}
+/* .row{
+  display: flex;
+  flex-direction: column;
+} */
+
+/* Karta menyusi */
+.al-kebab{
+  width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--border);
+  background:#fff;border-radius:8px;cursor:pointer
+}
+.al-kebab:hover{box-shadow:var(--shadow)}
+.al-menu{
+  position:absolute;top:42px;right:6px;z-index:3;min-width:190px;
+  background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);
+  display:flex;flex-direction:column;overflow:hidden
+}
+.al-menu-big{min-width:190px}
+.al-menu button,.al-menu .al-menu-link{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;font-size:14px;color:var(--ink);
+  background:#fff;border:0;text-decoration:none;cursor:pointer;
+}
+.al-menu button:hover,.al-menu .al-menu-link:hover{background:var(--bg-soft); }
+.al-menu .danger{color:var(--brand)}
+
+/* ---------- Drawers & Modals ---------- */
+.al-overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:998}
+.al-drawer{
+  position:fixed;top:0;right:0;height:100vh;width:380px;z-index:999;background:#fff;
+  border-left:1px solid var(--border);box-shadow:-10px 0 28px rgba(0,0,0,.06);
+  transform:translateX(100%);transition:transform .35s ease;display:flex;flex-direction:column
+}
+.al-drawer.show{transform:translateX(0);z-index:9999}
+.al-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:2px solid var(--border)}
+.al-drawer-head h2{margin:0;font-size:18px}
+.al-close{background:0 0;border:0;color:#6b7280;cursor:pointer}
+.al-close:hover{color:var(--brand)}
+.al-form{padding:14px;display:flex;flex-direction:column;gap:10px}
+.al-form label{color:#374151}
+.al-form input,.al-form textarea,.al-form select{
+  border:1px solid var(--border);border-radius:10px;padding:10px 12px;outline:0;
+  transition:box-shadow .15s,border-color .15s;background:#fff
+}
+.al-form textarea{min-height:96px;resize:vertical}
+.al-form input:focus,.al-form textarea:focus,.al-form select:focus{
+  border-color:#e1e5ea;box-shadow:0 0 0 4px rgba(208,2,27,.08)
+}
+.req{color:var(--brand)}
+.al-save{
+  margin-top:6px;border:0;border-radius:10px;height:40px;padding:0 14px;color:#fff;background:var(--brand);
+  box-shadow:var(--brand-shadow);cursor:pointer;transition:transform .06s, box-shadow .2s
+}
+.al-save:hover{box-shadow:0 12px 26px rgba(208,2,27,.28)}
+.al-save:active{transform:translateY(1px)}
+
+.al-colpanel{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);
+  width:560px;max-width:92vw;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);
+  opacity:0;pointer-events:none;transition:.2s ease;z-index:1000
+}
+.al-colpanel.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.al-colpanel-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)}
+.al-colpanel-head h3{margin:0;font-size:18px}
+.al-colpanel-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.al-colrow{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:10px;padding:8px 10px;background:#fff}
+.al-colrow-input{flex:1;height:38px;border:1px solid var(--border);border-radius:8px;padding:0 10px;outline:0}
+.al-colrow-input:disabled{background:#fafafa;color:#888}
+.al-colrow-actions{display:flex;align-items:center;gap:6px}
+.al-colrow-actions button{width:36px;height:36px;border:1px solid var(--border);background:#fff;border-radius:8px;cursor:pointer}
+.al-coladd{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:6px}
+.al-coladd input{height:40px;border:1px solid var(--border);border-radius:10px;padding:0 12px;outline:0}
+
+/* SMS/Comment/Reminder modal (bir xil qobiq) */
+.al-sms-modal{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:520px;max-width:92vw;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);z-index:1000;overflow:hidden
+}
+.al-sms-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)}
+.al-sms-head h3{margin:0;font-size:18px}
+.al-sms-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.al-sms-to{color:var(--ink)}
+.al-sms-body textarea,.al-sms-body input,.al-sms-body select{
+  padding:10px 12px;border:1px solid var(--border);border-radius:10px;outline:0;background:#fff
+}
+.al-sms-body textarea:focus,.al-sms-body input:focus,.al-sms-body select:focus{
+  border-color:#e1e5ea;box-shadow:0 0 0 4px rgba(208,2,27,.08)
+}
+.al-sms-meta{color:var(--muted);font-size:12px}
+.al-sms-foot{display:flex;justify-content:flex-end;gap:10px;padding:12px 14px;border-top:1px solid var(--border)}
+.al-btn-ghost{height:40px;padding:0 12px;border:1px solid var(--border);background:#fff;border-radius:10px;cursor:pointer}
+
+/* ---------- Pretty Scrollbar (WebKit) ---------- */
+.al-columns::-webkit-scrollbar{height:10px}
+.al-columns::-webkit-scrollbar-track{
+  background:linear-gradient(180deg,#f7f9fc,#eef1f4);border-radius:999px;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.05)
+}
+.al-columns::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#dfe3e8,#c8cdd3);border-radius:999px;border:2px solid #f3f5f7;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.06),0 2px 6px rgba(0,0,0,.12)
+}
+.al-columns::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#cfd4da,#b9bfc6)}
+.al-columns::-webkit-scrollbar-thumb:active{background:linear-gradient(180deg,#bcc2c9,#aeb5bd)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1200px){
+  .al-col{min-width:320px}
+}
+@media (max-width:820px){
+  .al-search{grid-template-columns:1fr 1fr;grid-auto-rows:38px}
+  .al-columns{height:auto}
+  .al-time{display:none}
+}
+
+
+
+/* === FIX: ustunlar ichida mustaqil vertikal skroll === */
+
+/* Board balandligi qat’iy bo‘lsin (sahifaga sig‘adigancha) */
+.al-columns{
+  height: calc(100vh - 260px);   /* xohlasangiz 220–300px oralig‘ida sozlang */
+  overflow-x: auto;
+  overflow-y: hidden;            /* vertikal skroll ustun ichida bo‘ladi */
+}
+
+/* Ustunlar board balandligini to‘liq olsin */
+.al-col{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;                 /* flex konteynerlarda skroll uchun muhim */
+}
+
+/* Sarlavha va inline-add qismlari qisqarmasin */
+.al-col-head,
+.al-inline-add{ flex-shrink: 0; }
+
+/* ASOSIY: kartalar konteyneri ichida vertikal skroll */
+.al-col-body{
+  flex: 1 1 auto;
+  min-height: 0;                 /* skrollning ochilishi uchun kerak */
+  overflow-y: auto;
+  padding-right: 4px;            /* o‘ngdagi skroll qirqib ketmasin */
+  overscroll-behavior: contain;  /* ichki skroll tashqariga “otib” ketmasin */
+}
+
+/* Ustun ichidagi (vertikal) skrollni chiroyliroq qilish */
+.al-col-body{
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) var(--text-light);
+}
+.al-col-body::-webkit-scrollbar{ width: 8px; }
+.al-col-body::-webkit-scrollbar-track{
+  background: var(--text-light);
+  border-radius: 999px;
+}
+.al-col-body::-webkit-scrollbar-thumb{
+  background: var(--border-color);
+  border-radius: 999px;
+  border: 2px solid var(--text-light);
+  box-shadow: 0 2px 6px var(--shadow-black);
+}
+.al-col-body::-webkit-scrollbar-thumb:hover{
+  background: var(--border-color);
+}
+
+
+
+
+
+/* Popover doimo hamma narsaning ustida bo'lsin */
+.al-popover{
+  z-index: 10050;
+  min-width: 300px;
+  max-width: 340px;
   background:#fff;
   border:1px solid var(--border-color);
-  border-radius:10px;
-  padding:8px;
-  box-shadow: 0 10px 22px var(--shadow-black);
-}
-.al-inline-form input{
-  height:40px; padding:0 10px;
-  border:1px solid var(--border-color);
-  border-radius:8px; outline:none;
-  font-family: 'Poppins', sans-serif;
-}
-.al-inline-form input:focus{
-  border-color:#e1e5ea; box-shadow: 0 0 0 4px rgba(208,2,27,.08);
-}
-.al-inline-actions{ display:flex; align-items:center; gap:8px; }
-.al-inline-actions button{
-  font-family: 'Poppins', sans-serif;
-}
-.al-inline-save{
-  background: var(--primary-color);
-  color:#fff; border:none; border-radius:8px; height:40px; padding:0 12px; cursor:pointer;
-  box-shadow: 0 8px 18px var(--hover-shadow);
-  font-family: 'Poppins', sans-serif;
-}
-.al-btn-ghost{
-  background:#fff; color:#111827; border:1px solid var(--border-color); border-radius:8px; height:40px; padding:0 12px; cursor:pointer;
-}
-
-/* SMS modal */
-.al-sms-modal{
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 520px; max-width: 92vw;
-  background:#fff; border:1px solid var(--border-color); border-radius:12px;
+  border-radius:12px;
   box-shadow: 0 18px 40px var(--shadow-black);
-  z-index: 1000; overflow:hidden;
-}
-.al-sms-head{
-  display:flex; align-items:center; justify-content:space-between; padding: 12px 14px; border-bottom:1px solid var(--border-color);
-}
-.al-sms-head h3{ margin:0; font-size: 1.5em; }
-.al-sms-body{ padding: 12px 14px; display:flex; flex-direction:column; gap:10px; }
-.al-sms-to{ color:#111827; }
-.al-sms-body textarea{
-  font-size:14px; padding:10px 12px; border:1px solid var(--border-color); border-radius:10px; outline:none;
-}
-.al-sms-body textarea:focus{
-  border-color:#e1e5ea; box-shadow: 0 0 0 4px rgba(208,2,27,.08);
-}
-.al-sms-meta{ color: var(--text-gray); font-size:12px; }
-.al-sms-foot{
-  display:flex; justify-content:flex-end; gap:10px; padding: 12px 14px; border-top:1px solid var(--border-color);
+  padding: 12px 14px;
 }
 
-/* Responsive */
-@media (max-width: 1100px){
-  .al-columns{ grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 700px){
-  .al-columns{ grid-template-columns: 1fr; }
-  .active-leads{ width:auto; margin: 40px 16px; }
-}
-
-
-
-/* Qulflangan box ko'rinishi */
-.al-group.locked { opacity: .95; }
-
-.al-group-body.locked {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 56px;
-  padding: 12px;
-  pointer-events: none;      /* ichida hech narsa bosilmasin */
-  background: #fff;
-  border-top: 1px solid var(--border-color);
-  border-radius: 0 0 12px 12px;
+/* kichik "strelka" (ikonka chapida, popoverning chap chetida) */
+.al-popover::before{
+  content:"";
+  position:absolute;
+  left:-6px; top:12px;
+  width:12px; height:12px;
+  background:#fff;
+  border-left:1px solid var(--border-color);
+  border-top:1px solid var(--border-color);
+  transform: rotate(45deg);
 }
 
-.al-locked-msg {
-  font-size: 13px;
-  color: var(--text-gray);
-}
+/* ichki tipografiya */
+.al-pop-title{ font-weight:600; margin-bottom:8px; }
+.al-pop-row{ display:grid; grid-template-columns: 110px 1fr; gap:8px; padding:6px 0; }
+.al-pop-row .t{ color: var(--text-gray); }
+.al-pop-row + .al-pop-row{ border-top:1px solid var(--border-color); }
 
 
-/* ===========================
-   RESPONSIVE / MEDIA QUERIES
-   =========================== */
-
-/* Katta planshetlar (≤ 1200px) */
-@media (max-width: 1200px) {
-  .active-leads{
-    width: auto;
-    margin: 40px 24px 24px 24px; /* yonlar torayadi */
-  }
-  .al-columns{
-    grid-template-columns: 1fr 1fr;   /* 4 → 2 ustun */
-    gap: 12px;
-  }
-  .al-search{
-    grid-template-columns: 1fr 1fr;   /* qidiruv ham 2 qatorda */
-    gap: 8px 12px;
-  }
-  .al-drawer{ width: 420px; }         /* biroz kengroq drawer OK */
-}
-
-/* Planshetlar (≤ 992px) */
-@media (max-width: 992px) {
-  .active-leads{
-    margin: 32px 16px;
-  }
-  .al-head{ gap: 8px; }
-  .al-title{ font-size: 1.35em; }
-  .al-add-btn{ padding: 9px 12px; }
-
-  .al-columns{
-    grid-template-columns: 1fr 1fr;   /* 2 ustun saqlaymiz */
-    gap: 10px;
-  }
-  .al-col{ min-height: 240px; }
-  .al-col-head{ padding: 10px; }
-
-  .al-search{
-    grid-template-columns: 1fr;       /* 1 ustunli search */
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .al-search input,
-  .al-search select{
-    height: 38px;
-    font-size: 14px;
-  }
-
-  .al-drawer{ width: 360px; }
-}
-
-/* Kichik planshet / katta telefon (≤ 768px) */
-@media (max-width: 768px) {
-  .active-leads{
-    margin: 24px 14px;
-    font-size: 13.5px;                /* matn biroz ixcham */
-  }
-
-  .al-head{
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-  .al-add-btn{ width: 100%; }
-
-  .al-columns{
-    grid-template-columns: 1fr;       /* 1 ustun */
-    gap: 12px;
-  }
-
-  .al-col-body{ padding: 10px; gap: 10px; }
-
-  /* Karta touch-friendly */
-  .al-card{
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px var(--shadow-black);
-  }
-  .al-kebab{ width: 28px; height: 28px; }
-
-  /* Inline add form (1-ustun pastidagi) */
-  .al-inline-form{
-    grid-template-columns: 1fr;
-  }
-  .al-inline-actions{
-    justify-content: flex-end;
-  }
-
-  /* Drawer to‘liq ekran */
-  .al-drawer{
-    width: 100vw;
-    max-width: 100vw;
-  }
-  .al-drawer-head h2{ font-size: 1.3em; }
-}
-
-/* Telefonlar (≤ 600px) */
-@media (max-width: 600px) {
-  .active-leads{
-    margin: 20px 12px;
-  }
-  .al-title{ font-size: 1.25em; }
-
-  .al-group-head{
-    padding: 8px 10px;
-  }
-  .al-group-body{ padding: 8px; gap: 8px; }
-  .al-chip{ padding: 2px 6px; font-size: 12px; }
-
-  .al-menu{ min-width: 160px; }       /* kebab menyu tor ekranda */
-  .al-sms-modal{
-    width: 94vw;
-  }
-}
-
-/* Kichik telefonlar (≤ 480px) */
-@media (max-width: 480px) {
-  .active-leads{
-    margin: 16px 10px;
-  }
-  .al-title{ font-size: 1.2em; }
-
-  .al-col{ border-radius: 10px; }
-  .al-col-head{
-    padding: 8px;
-    border-radius: 10px 10px 0 0;
-  }
-
-  .al-search input,
-  .al-search select{
-    height: 36px;
-    font-size: 13px;
-    padding: 0 10px;
-  }
-
-  .al-inline-btn{ height: 42px; border-radius: 8px; }
-  .al-inline-form{
-    padding: 8px;
-    border-radius: 8px;
-  }
-  .al-inline-save,
-  .al-btn-ghost{
-    height: 36px;
-    border-radius: 8px;
-  }
-
-  .al-save, .al-add-btn{
-    padding: 9px 12px;
-    border-radius: 8px;
-  }
-}
-
-/* iOS safe-area (iPhone X va hokazo) */
-@supports (padding: max(0px)) {
-  .al-drawer{
-    padding-bottom: max(16px, env(safe-area-inset-bottom));
-  }
-}
-
-/* Touch optimizatsiya: skroll, tasodifiy zoom va tanlashni kamaytirish */
-@media (max-width: 768px){
-  .al-card, .al-col, .al-group, .al-inline-btn, .al-add-btn{
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-  /* Drag bilan scroll to‘qnashmasin */
-  .al-group-body{ touch-action: pan-y; }
+.select-wrap{
+  width: 150px;
 }

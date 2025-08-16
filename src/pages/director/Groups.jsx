@@ -1,495 +1,481 @@
 import React, { useMemo, useState } from "react";
+import {
+  FiChevronDown,
+  FiX,
+  FiPlus,
+  FiSettings,
+  FiMoreVertical,
+  FiCalendar,
+  FiTag,
+  FiUser,
+  FiBookOpen,
+  FiMapPin,
+  FiClock,
+  FiEdit2,
+  FiTrash2,
+  FiMail,
+  FiDownloadCloud,
+} from "react-icons/fi";
 import "./Groups.css";
-import { FaEllipsisV } from "react-icons/fa";
 
-/* ==== Demo ma'lumotlar ==== */
-const TEACHERS = ["Abbos shashoq", "Dilshod Bek", "Malika Karimova"];
-const COURSES = ["Ingliz tili", "Frontend", "React", "IELTS"];
-const DAYS = ["Odd days", "Even days", "Weekend days"];
-const ROOMS = ["A1", "A2", "B1", "B2"];
-const TAGS = ["New", "Intensive", "Morning", "Evening"];
-
-const initialGroups = [
-  {
-    id: 1,
-    name: "A1",
-    course: "Ingliz tili",
-    teacher: "Abbos shashoq",
-    days: "Weekend days",
-    startDate: "2025-08-18",
-    endDate: "2026-08-18",
-    weekOfStudy: "not started",
-    room: "A2",
-    tags: ["New"],
-    students: 0,
-    status: "Active groups",
-  },
-];
-
-/* Jadval ustunlari (Columns paneli) */
+/* ----------------------------- MOCKED DATA ------------------------------ */
 const ALL_COLUMNS = [
-  { key: "name", label: "Group" },
+  { key: "group", label: "Group" },
   { key: "course", label: "Course" },
   { key: "teacher", label: "Teacher" },
   { key: "days", label: "Days" },
-  { key: "trainingDates", label: "Training dates" }, // computed from start/end
-  { key: "weekOfStudy", label: "Week of study" },
+  { key: "dates", label: "Training dates" },
+  { key: "week", label: "Week of study" },
   { key: "room", label: "Room" },
   { key: "tags", label: "Tags" },
   { key: "students", label: "Students" },
-  { key: "actions", label: "Actions" }, // kebab
+  { key: "actions", label: "Actions" },
 ];
 
-export default function Groups() {
-  /* ====== State ====== */
-  const [groups, setGroups] = useState(initialGroups);
+const MOCK_GROUPS = [
+  {
+    id: "g1",
+    name: "A1",
+    course: "Ingliz tili",
+    teacher: "Abbos shashoq",
+    days: "Weekend days · 10:21",
+    start: "18.08.2025",
+    end: "18.08.2026",
+    week: "not started",
+    room: "A2",
+    tags: [],
+    students: 0,
+  },
+  {
+    id: "g2",
+    name: "B2",
+    course: "Matematika",
+    teacher: "Nigora Q.",
+    days: "Mon/Wed/Fri · 15:30",
+    start: "12.09.2025",
+    end: "12.02.2026",
+    week: "week 4",
+    room: "B1",
+    tags: ["olymp"],
+    students: 12,
+  },
+  {
+    id: "g3",
+    name: "Kids-A",
+    course: "Ingliz tili Kids",
+    teacher: "Jasur R.",
+    days: "Tue/Thu · 10:00",
+    start: "01.10.2025",
+    end: "01.04.2026",
+    week: "week 2",
+    room: "K1",
+    tags: ["kids"],
+    students: 9,
+  },
+  {
+    id: "g4",
+    name: "SAT-Prep",
+    course: "SAT",
+    teacher: "Aziza S.",
+    days: "Sat/Sun · 18:00",
+    start: "05.11.2025",
+    end: "05.05.2026",
+    week: "not started",
+    room: "C3",
+    tags: ["exam"],
+    students: 7,
+  },
+];
 
-  // Filtrlar
+/* ------------------------------- COMPONENT ------------------------------ */
+export default function Groups() {
   const [filters, setFilters] = useState({
     status: "Active groups",
     teacher: "",
     course: "",
     days: "",
-    tag: "",
-    startDate: "",
-    endDate: "",
+    tags: "",
+    start: "",
+    end: "",
   });
 
-  // Columns panel
-  const [showColumns, setShowColumns] = useState(false);
   const [visibleCols, setVisibleCols] = useState(
-    ALL_COLUMNS.reduce((acc, c) => ({ ...acc, [c.key]: true }), {})
+    ALL_COLUMNS.reduce((m, c) => ({ ...m, [c.key]: true }), {})
   );
 
-  // Add modal
-  const [showAdd, setShowAdd] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    course: "",
-    teacher: "",
-    days: "",
-    room: "",
-    lessonTime: "",
-    startDate: "",
-  });
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [columnsOpen, setColumnsOpen] = useState(false);
+  const [selected, setSelected] = useState(null); // group id for details
 
-  // Kebab (uch nuqta) menyu
-  const [kebabId, setKebabId] = useState(null);
-
-  /* ====== Helpers ====== */
   const clearFilters = () =>
     setFilters({
       status: "Active groups",
       teacher: "",
       course: "",
       days: "",
-      tag: "",
-      startDate: "",
-      endDate: "",
+      tags: "",
+      start: "",
+      end: "",
     });
 
-  const filtered = useMemo(() => {
-    return groups.filter((g) => {
-      const okStatus = !filters.status || g.status === filters.status;
-      const okTeacher = !filters.teacher || g.teacher === filters.teacher;
-      const okCourse = !filters.course || g.course === filters.course;
-      const okDays = !filters.days || g.days === filters.days;
-      const okTag = !filters.tag || (g.tags || []).includes(filters.tag);
-      const okStart =
-        !filters.startDate || (g.startDate && g.startDate >= filters.startDate);
-      const okEnd =
-        !filters.endDate || (g.endDate && g.endDate <= filters.endDate);
-
-      return okStatus && okTeacher && okCourse && okDays && okTag && okStart && okEnd;
+  const data = useMemo(() => {
+    // Demo: only simple text includes filtering
+    return MOCK_GROUPS.filter((g) => {
+      if (filters.teacher && !g.teacher.toLowerCase().includes(filters.teacher.toLowerCase())) return false;
+      if (filters.course && !g.course.toLowerCase().includes(filters.course.toLowerCase())) return false;
+      if (filters.tags && !g.tags.join(",").toLowerCase().includes(filters.tags.toLowerCase())) return false;
+      if (filters.start && g.start < filters.start) return false;
+      if (filters.end && g.end > filters.end) return false;
+      return true;
     });
-  }, [groups, filters]);
+  }, [filters]);
 
-  const onSubmitAdd = (e) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.course || !form.teacher) {
-      alert("Name, Course va Teacher majburiy.");
-      return;
-    }
-    const id = groups.length ? Math.max(...groups.map((g) => g.id)) + 1 : 1;
-    const newItem = {
-      id,
-      name: form.name.trim(),
-      course: form.course,
-      teacher: form.teacher,
-      days: form.days,
-      startDate: form.startDate || "",
-      endDate: "",
-      weekOfStudy: "not started",
-      room: form.room || "",
-      tags: [],
-      students: 0,
-      status: "Active groups",
-    };
-    setGroups((prev) => [newItem, ...prev]);
-    setForm({
-      name: "",
-      course: "",
-      teacher: "",
-      days: "",
-      room: "",
-      lessonTime: "",
-      startDate: "",
-    });
-    setShowAdd(false);
-  };
+  if (selected) {
+    const group = MOCK_GROUPS.find((g) => g.id === selected);
+    return <GroupDetails group={group} onBack={() => setSelected(null)} />;
+  }
 
-  /* ====== UI ====== */
   return (
-    <div className="groups-page">
-      {/* Header */}
+    <div className="groups">
       <div className="groups-head">
-        <div className="title-wrap">
-          <h1 className="title">Groups</h1>
-          <span className="qty">Quantity — {filtered.length}</span>
+        <div className="groups-title">
+          <h1>Groups</h1>
+          <div className="qty">Quantity — {data.length}</div>
         </div>
 
-        <button className="add-btn" onClick={() => setShowAdd(true)}>
-          ADD NEW
-        </button>
+        <div className="head-actions">
+          <button className="columns-btn" onClick={() => setColumnsOpen(true)}>
+            <FiSettings /> <span>Columns</span>
+          </button>
+          <button className="add-btn" onClick={() => setDrawerOpen(true)}>
+            <FiPlus /> <span>ADD NEW</span>
+          </button>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className="filters-row">
-        <div className="select">
-          <select
-            value={filters.status}
-            onChange={(e) => setFilters((p) => ({ ...p, status: e.target.value }))}
-          >
-            <option>Active groups</option>
-            <option>Archived</option>
-          </select>
-          <span className="chev">▾</span>
+      {/* Filters / Search row */}
+      <div className="filters">
+        <div className="filter">
+          <button className="select like-input">
+            <span>{filters.status}</span>
+            <FiChevronDown />
+          </button>
         </div>
 
-        <div className="select">
-          <select
-            value={filters.teacher}
-            onChange={(e) => setFilters((p) => ({ ...p, teacher: e.target.value }))}
-          >
-            <option value="">Teachers</option>
-            {TEACHERS.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-          <span className="chev">▾</span>
+        <div className="filter">
+          <div className="like-input">
+            <FiUser />
+            <input
+              value={filters.teacher}
+              onChange={(e) => setFilters((f) => ({ ...f, teacher: e.target.value }))}
+              placeholder="Teachers"
+            />
+          </div>
         </div>
 
-        <div className="select">
-          <select
-            value={filters.course}
-            onChange={(e) => setFilters((p) => ({ ...p, course: e.target.value }))}
-          >
-            <option value="">Courses</option>
-            {COURSES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          <span className="chev">▾</span>
+        <div className="filter">
+          <div className="like-input">
+            <FiBookOpen />
+            <input
+              value={filters.course}
+              onChange={(e) => setFilters((f) => ({ ...f, course: e.target.value }))}
+              placeholder="Courses"
+            />
+          </div>
         </div>
 
-        <div className="select">
-          <select
-            value={filters.days}
-            onChange={(e) => setFilters((p) => ({ ...p, days: e.target.value }))}
-          >
-            <option value="">Days</option>
-            {DAYS.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-          <span className="chev">▾</span>
+        <div className="filter">
+          <div className="like-input">
+            <FiClock />
+            <input
+              value={filters.days}
+              onChange={(e) => setFilters((f) => ({ ...f, days: e.target.value }))}
+              placeholder="Days"
+            />
+          </div>
         </div>
 
-        <div className="select">
-          <select
-            value={filters.tag}
-            onChange={(e) => setFilters((p) => ({ ...p, tag: e.target.value }))}
-          >
-            <option value="">Tags</option>
-            {TAGS.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-          <span className="chev">▾</span>
+        <div className="filter">
+          <div className="like-input">
+            <FiTag />
+            <input
+              value={filters.tags}
+              onChange={(e) => setFilters((f) => ({ ...f, tags: e.target.value }))}
+              placeholder="Tags"
+            />
+          </div>
         </div>
 
-        <div className="input with-icon">
-          <span className="calendar">📅</span>
-          <input
-            type="date"
-            value={filters.startDate}
-            onChange={(e) => setFilters((p) => ({ ...p, startDate: e.target.value }))}
-            placeholder="Start date"
-          />
+        <div className="filter">
+          <div className="like-input">
+            <FiCalendar />
+            <input
+              type="text"
+              value={filters.start}
+              onChange={(e) => setFilters((f) => ({ ...f, start: e.target.value }))}
+              placeholder="Start date"
+            />
+          </div>
         </div>
 
-        <div className="input with-icon">
-          <span className="calendar">📅</span>
-          <input
-            type="date"
-            value={filters.endDate}
-            onChange={(e) => setFilters((p) => ({ ...p, endDate: e.target.value }))}
-            placeholder="End date"
-          />
+        <div className="filter">
+          <div className="like-input">
+            <FiCalendar />
+            <input
+              type="text"
+              value={filters.end}
+              onChange={(e) => setFilters((f) => ({ ...f, end: e.target.value }))}
+              placeholder="End date"
+            />
+          </div>
         </div>
-
-        <button className="columns-btn" onClick={() => setShowColumns(true)}>
-          <span className="dots">▥</span> Columns
-        </button>
 
         <button className="clear-btn" title="Clear filters" onClick={clearFilters}>
-          ×
+          <FiX />
         </button>
       </div>
 
       {/* Table */}
-      <div className="table">
-        <div className="thead">
-          {ALL_COLUMNS.map((col) =>
-            visibleCols[col.key] ? (
-              <div className="th" key={col.key}>
-                {col.label}
+      <div className="table-wrap">
+        <table className="groups-table">
+          <thead>
+            <tr>
+              {visibleCols.group && <th>Group</th>}
+              {visibleCols.course && <th>Course</th>}
+              {visibleCols.teacher && <th>Teacher</th>}
+              {visibleCols.days && <th>Days</th>}
+              {visibleCols.dates && <th>Training dates</th>}
+              {visibleCols.week && <th>Week of study</th>}
+              {visibleCols.room && <th>Room</th>}
+              {visibleCols.tags && <th>Tags</th>}
+              {visibleCols.students && <th>Students</th>}
+              {visibleCols.actions && <th>Actions</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((g, idx) => (
+              <tr key={g.id}>
+                {visibleCols.group && (
+                  <td className="cell-link">
+                    <button className="link" onClick={() => setSelected(g.id)}>
+                      {g.name}
+                    </button>
+                  </td>
+                )}
+                {visibleCols.course && <td>{g.course}</td>}
+                {visibleCols.teacher && <td>{g.teacher}</td>}
+                {visibleCols.days && <td>{g.days}</td>}
+                {visibleCols.dates && (
+                  <td>
+                    {g.start} — {g.end}
+                  </td>
+                )}
+                {visibleCols.week && <td>{g.week}</td>}
+                {visibleCols.room && <td>{g.room}</td>}
+                {visibleCols.tags && <td>{g.tags.join(", ")}</td>}
+                {visibleCols.students && <td>{g.students}</td>}
+                {visibleCols.actions && (
+                  <td className="actions-td">
+                    <button className="icon-ghost">
+                      <FiMoreVertical />
+                    </button>
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Add New Drawer */}
+      {drawerOpen && (
+        <div className="drawer-backdrop" onClick={() => setDrawerOpen(false)}>
+          <div className="drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="drawer-head">
+              <h3>Add New Group</h3>
+              <button className="icon-ghost" onClick={() => setDrawerOpen(false)}>
+                <FiX />
+              </button>
+            </div>
+
+            <div className="drawer-body">
+              <label className="f-label">Name</label>
+              <input className="f-input" placeholder="Group name" />
+
+              <label className="f-label">Select course</label>
+              <div className="f-select">
+                <span>Select options</span>
+                <FiChevronDown />
               </div>
-            ) : null
-          )}
-        </div>
 
-        <div className="tbody">
-          {filtered.length === 0 ? (
-            <div className="empty">No data</div>
-          ) : (
-            filtered.map((g) => {
-              const trainingDates = `${g.startDate || "—"}${
-                g.endDate ? " — " + g.endDate : ""
-              }`;
-              return (
-                <div className="tr" key={g.id}>
-                  {visibleCols.name && <div className="td name-cell">{g.name}</div>}
-                  {visibleCols.course && <div className="td">{g.course || "—"}</div>}
-                  {visibleCols.teacher && <div className="td">{g.teacher || "—"}</div>}
-                  {visibleCols.days && (
-                    <div className="td">
-                      {g.days || "—"}
-                      {g.days?.includes("Weekend") ? (
-                        <div className="sub">10:21</div>
-                      ) : null}
-                    </div>
-                  )}
-                  {visibleCols.trainingDates && (
-                    <div className="td">{trainingDates}</div>
-                  )}
-                  {visibleCols.weekOfStudy && (
-                    <div className="td">{g.weekOfStudy || "—"}</div>
-                  )}
-                  {visibleCols.room && <div className="td">{g.room || "—"}</div>}
-                  {visibleCols.tags && (
-                    <div className="td">
-                      {(g.tags || []).length ? g.tags.join(", ") : "—"}
-                    </div>
-                  )}
-                  {visibleCols.students && (
-                    <div className="td">{g.students ?? 0}</div>
-                  )}
-                  {visibleCols.actions && (
-                    <div className="td actions-cell">
-                      <button
-                        className="kebab"
-                        onClick={() =>
-                          setKebabId((prev) => (prev === g.id ? null : g.id))
-                        }
-                      >
-                        <FaEllipsisV />
-                      </button>
+              <label className="f-label">Select teacher</label>
+              <div className="f-select">
+                <span>Select options</span>
+                <FiChevronDown />
+              </div>
 
-                      {kebabId === g.id && (
-                        <div
-                          className="menu"
-                          onMouseLeave={() => setKebabId(null)}
-                        >
-                          <button onClick={() => alert("Edit " + g.name)}>
-                            Edit
-                          </button>
-                          <button onClick={() => alert("Archive " + g.name)}>
-                            Archive
-                          </button>
-                          <button
-                            className="danger"
-                            onClick={() => alert("Delete " + g.name)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
+              <label className="f-label">Days</label>
+              <div className="f-select">
+                <span>Select options</span>
+                <FiChevronDown />
+              </div>
+
+              <label className="f-label">Select room</label>
+              <div className="f-select">
+                <span>Select options</span>
+                <FiChevronDown />
+              </div>
+
+              <label className="f-label">Lesson start time</label>
+              <div className="f-select">
+                <span>No time selected</span>
+                <FiChevronDown />
+              </div>
+
+              <label className="f-label">Group training dates</label>
+              <div className="f-date-row">
+                <div className="f-date">
+                  <FiCalendar />
+                  <input placeholder="Start date" />
                 </div>
-              );
-            })
-          )}
-        </div>
-      </div>
+                <div className="f-date">
+                  <FiCalendar />
+                  <input placeholder="End date" />
+                </div>
+              </div>
+            </div>
 
-      {/* Columns panel */}
-      {showColumns && (
-        <div className="overlay" onClick={() => setShowColumns(false)} />
+            <div className="drawer-foot">
+              <button className="btn-secondary" onClick={() => setDrawerOpen(false)}>
+                Cancel
+              </button>
+              <button className="btn-primary" onClick={() => setDrawerOpen(false)}>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
       )}
-      <div className={`columns-panel ${showColumns ? "show" : ""}`}>
-        <div className="panel-head">
-          <h3>Columns</h3>
-          <button className="close" onClick={() => setShowColumns(false)}>
-            ×
-          </button>
+
+      {/* Columns Modal */}
+      {columnsOpen && (
+        <div className="modal-backdrop" onClick={() => setColumnsOpen(false)}>
+          <div className="columns-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="columns-head">
+              <div className="title">Columns</div>
+              <button className="icon-ghost" onClick={() => setColumnsOpen(false)}>
+                <FiX />
+              </button>
+            </div>
+            <div className="columns-body">
+              {ALL_COLUMNS.filter((c) => c.key !== "actions").map((c) => (
+                <label key={c.key} className="col-item">
+                  <input
+                    type="checkbox"
+                    checked={!!visibleCols[c.key]}
+                    onChange={(e) =>
+                      setVisibleCols((v) => ({ ...v, [c.key]: e.target.checked }))
+                    }
+                  />
+                  <span>{c.label}</span>
+                </label>
+              ))}
+              {/* Actions column always on for UX parity; hide if xohlasangiz */}
+              <label className="col-item">
+                <input
+                  type="checkbox"
+                  checked={!!visibleCols.actions}
+                  onChange={(e) =>
+                    setVisibleCols((v) => ({ ...v, actions: e.target.checked }))
+                  }
+                />
+                <span>Actions</span>
+              </label>
+            </div>
+          </div>
         </div>
-        <div className="panel-body">
-          {ALL_COLUMNS.map((c) => (
-            <label key={c.key} className="col-item">
-              <input
-                type="checkbox"
-                checked={visibleCols[c.key]}
-                onChange={(e) =>
-                  setVisibleCols((p) => ({ ...p, [c.key]: e.target.checked }))
-                }
-              />
-              <span>{c.label}</span>
-            </label>
-          ))}
+      )}
+    </div>
+  );
+}
+
+/* ---------------------------- GROUP DETAILS ----------------------------- */
+function GroupDetails({ group, onBack }) {
+  return (
+    <div className="group-details">
+      <div className="gd-top">
+        <button className="btn-secondary" onClick={onBack}>
+          ← Back
+        </button>
+        <h2 className="gd-title">
+          {group.name} · {group.course} · {group.teacher}
+        </h2>
+      </div>
+
+      <div className="gd-card">
+        <ul className="gd-info">
+          <li>
+            <strong>Course:</strong> {group.course}
+          </li>
+          <li>
+            <strong>Teacher:</strong> {group.teacher}
+          </li>
+          <li>
+            <strong>Price:</strong> 1 000 000 UZS
+          </li>
+          <li>
+            <strong>Time:</strong> {group.days}
+          </li>
+          <li>
+            <strong>Rooms:</strong> {group.room}
+          </li>
+          <li>
+            <strong>Room capacity:</strong> 9
+          </li>
+          <li>
+            <strong>Training dates:</strong> {group.start} — {group.end}
+          </li>
+          <li className="gd-id">
+            <em>(id: 139793)</em>
+          </li>
+        </ul>
+
+        <div className="gd-actions">
+          <button className="gd-icon" title="Edit">
+            <FiEdit2 />
+          </button>
+          <button className="gd-icon danger" title="Delete">
+            <FiTrash2 />
+          </button>
+          <button className="gd-icon" title="Email">
+            <FiMail />
+          </button>
+          <button className="gd-icon" title="Add">
+            <FiPlus />
+          </button>
+          <button className="gd-icon" title="Export">
+            <FiDownloadCloud />
+          </button>
         </div>
       </div>
 
-      {/* Add new modal (drawer) */}
-      {showAdd && <div className="overlay" onClick={() => setShowAdd(false)} />}
-      <div className={`add-modal ${showAdd ? "show" : ""}`}>
-        <div className="modal-head">
-          <h3>Add New Group</h3>
-          <button className="close" onClick={() => setShowAdd(false)}>
-            ×
-          </button>
-        </div>
+      <div className="gd-tabs">
+        <button className="tab active">Attendance</button>
+        <button className="tab">Online lessons and materials</button>
+        <button className="tab">Discount prices</button>
+        <button className="tab">Exams</button>
+        <button className="tab">History</button>
+        <button className="tab">Comments</button>
+      </div>
 
-        <form
-          className="modal-body"
-          onSubmit={onSubmitAdd}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <label>Name</label>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-            placeholder="Group name"
-          />
+      <div className="gd-panel">
+        <div className="gd-panel-bar" />
+        <div className="gd-panel-card">Course has not started yet</div>
+      </div>
 
-          <label>Select course</label>
-          <div className="select">
-            <select
-              value={form.course}
-              onChange={(e) => setForm((p) => ({ ...p, course: e.target.value }))}
-            >
-              <option value="">Select options</option>
-              {COURSES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-            <span className="chev">▾</span>
-          </div>
-
-          <label>Select teacher</label>
-          <div className="select">
-            <select
-              value={form.teacher}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, teacher: e.target.value }))
-              }
-            >
-              <option value="">Select options</option>
-              {TEACHERS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-            <span className="chev">▾</span>
-          </div>
-
-          <label>Days</label>
-          <div className="select">
-            <select
-              value={form.days}
-              onChange={(e) => setForm((p) => ({ ...p, days: e.target.value }))}
-            >
-              <option value="">Select options</option>
-              {DAYS.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-            <span className="chev">▾</span>
-          </div>
-
-          <label>Select room</label>
-          <div className="select">
-            <select
-              value={form.room}
-              onChange={(e) => setForm((p) => ({ ...p, room: e.target.value }))}
-            >
-              <option value="">Select options</option>
-              {ROOMS.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-            <span className="chev">▾</span>
-          </div>
-
-          <label>Lesson start time</label>
-          <div className="input with-icon">
-            <span className="clock">🕘</span>
-            <input
-              type="time"
-              value={form.lessonTime}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, lessonTime: e.target.value }))
-              }
-              placeholder="No time selected"
-            />
-          </div>
-
-          <label>Group start date</label>
-          <div className="input with-icon">
-            <span className="calendar">📅</span>
-            <input
-              type="date"
-              value={form.startDate}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, startDate: e.target.value }))
-              }
-              placeholder="No date selected"
-            />
-          </div>
-
-          <div className="modal-foot">
-            <button type="submit" className="submit-btn">
-              Submit
-            </button>
-          </div>
-        </form>
+      <div className="gd-note">
+        <div className="gd-note-title">Note</div>
+        <textarea placeholder="Write a note..." />
       </div>
     </div>
   );

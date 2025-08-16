@@ -1,0 +1,40 @@
+/* 1) Poppinsni yuklash (bittasini tanlang) */
+/* index.html <head> ichiga: */
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+/* yoki CSS faylingiz boshida: */
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'); */
+
+/* 2) Global font bazasi */
+:root{
+  --font-sans: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body{
+  font-family: var(--font-sans);
+  /* ixtiyoriy: umumiy o‘lcham/line-height */
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* 3) Hamma narsaga meros qildirib qo‘yamiz */
+*, *::before, *::after{
+  font-family: inherit;
+}
+
+/* 4) Form control’lar odatda meros olmaydi — majburan bering */
+button,
+input,
+select,
+textarea{
+  font: inherit;            /* font-family + size + weight ni ham meros qiladi */
+}
+
+/* 5) Ba’zi brauzerlarda <option> alohida bo‘ladi */
+select, option{
+  font-family: inherit;
+}
+
+/* 6) Placeholder ham Poppins bo‘lsin (ixtiyoriy) */
+::placeholder{
+  font-family: inherit;
+}
