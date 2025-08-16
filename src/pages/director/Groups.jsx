@@ -9,7 +9,6 @@ import {
   FiTag,
   FiUser,
   FiBookOpen,
-  FiMapPin,
   FiClock,
   FiEdit2,
   FiTrash2,
@@ -18,7 +17,7 @@ import {
 } from "react-icons/fi";
 import "./Groups.css";
 
-/* ----------------------------- MOCKED DATA ------------------------------ */
+/* ========================= CONSTS & MOCK DATA ========================= */
 const ALL_COLUMNS = [
   { key: "group", label: "Group" },
   { key: "course", label: "Course" },
@@ -45,6 +44,8 @@ const MOCK_GROUPS = [
     room: "A2",
     tags: [],
     students: 0,
+    price: "1 000 000 UZS",
+    capacity: 9,
   },
   {
     id: "g2",
@@ -58,6 +59,8 @@ const MOCK_GROUPS = [
     room: "B1",
     tags: ["olymp"],
     students: 12,
+    price: "1 200 000 UZS",
+    capacity: 10,
   },
   {
     id: "g3",
@@ -71,6 +74,8 @@ const MOCK_GROUPS = [
     room: "K1",
     tags: ["kids"],
     students: 9,
+    price: "800 000 UZS",
+    capacity: 8,
   },
   {
     id: "g4",
@@ -84,10 +89,12 @@ const MOCK_GROUPS = [
     room: "C3",
     tags: ["exam"],
     students: 7,
+    price: "1 500 000 UZS",
+    capacity: 12,
   },
 ];
 
-/* ------------------------------- COMPONENT ------------------------------ */
+/* ================================ PAGE ================================= */
 export default function Groups() {
   const [filters, setFilters] = useState({
     status: "Active groups",
@@ -98,14 +105,12 @@ export default function Groups() {
     start: "",
     end: "",
   });
-
   const [visibleCols, setVisibleCols] = useState(
     ALL_COLUMNS.reduce((m, c) => ({ ...m, [c.key]: true }), {})
   );
-
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [columnsOpen, setColumnsOpen] = useState(false);
-  const [selected, setSelected] = useState(null); // group id for details
+  const [selected, setSelected] = useState(null); // group id
 
   const clearFilters = () =>
     setFilters({
@@ -119,7 +124,6 @@ export default function Groups() {
     });
 
   const data = useMemo(() => {
-    // Demo: only simple text includes filtering
     return MOCK_GROUPS.filter((g) => {
       if (filters.teacher && !g.teacher.toLowerCase().includes(filters.teacher.toLowerCase())) return false;
       if (filters.course && !g.course.toLowerCase().includes(filters.course.toLowerCase())) return false;
@@ -153,7 +157,7 @@ export default function Groups() {
         </div>
       </div>
 
-      {/* Filters / Search row */}
+      {/* Filters / Search */}
       <div className="filters">
         <div className="filter">
           <button className="select like-input">
@@ -253,7 +257,7 @@ export default function Groups() {
             </tr>
           </thead>
           <tbody>
-            {data.map((g, idx) => (
+            {data.map((g) => (
               <tr key={g.id}>
                 {visibleCols.group && (
                   <td className="cell-link">
@@ -380,7 +384,6 @@ export default function Groups() {
                   <span>{c.label}</span>
                 </label>
               ))}
-              {/* Actions column always on for UX parity; hide if xohlasangiz */}
               <label className="col-item">
                 <input
                   type="checkbox"
@@ -399,8 +402,9 @@ export default function Groups() {
   );
 }
 
-/* ---------------------------- GROUP DETAILS ----------------------------- */
+/* ============================ DETAILS VIEW ============================= */
 function GroupDetails({ group, onBack }) {
+  const g = group || {};
   return (
     <div className="group-details">
       <div className="gd-top">
@@ -408,32 +412,32 @@ function GroupDetails({ group, onBack }) {
           ← Back
         </button>
         <h2 className="gd-title">
-          {group.name} · {group.course} · {group.teacher}
+          {g.name} · {g.course} · {g.teacher}
         </h2>
       </div>
 
       <div className="gd-card">
         <ul className="gd-info">
           <li>
-            <strong>Course:</strong> {group.course}
+            <strong>Course:</strong> {g.course}
           </li>
           <li>
-            <strong>Teacher:</strong> {group.teacher}
+            <strong>Teacher:</strong> {g.teacher}
           </li>
           <li>
-            <strong>Price:</strong> 1 000 000 UZS
+            <strong>Price:</strong> {g.price}
           </li>
           <li>
-            <strong>Time:</strong> {group.days}
+            <strong>Time:</strong> {g.days}
           </li>
           <li>
-            <strong>Rooms:</strong> {group.room}
+            <strong>Rooms:</strong> {g.room}
           </li>
           <li>
-            <strong>Room capacity:</strong> 9
+            <strong>Room capacity:</strong> {g.capacity}
           </li>
           <li>
-            <strong>Training dates:</strong> {group.start} — {group.end}
+            <strong>Training dates:</strong> {g.start} — {g.end}
           </li>
           <li className="gd-id">
             <em>(id: 139793)</em>
@@ -457,6 +461,28 @@ function GroupDetails({ group, onBack }) {
             <FiDownloadCloud />
           </button>
         </div>
+
+        <div style={{ height: 1, background: "var(--border-color)", margin: "10px 0 12px" }} />
+
+        <div className="gd-foot" style={{ paddingTop: 6 }}>
+          <div className="gd-select">
+            <span>By A-Z</span>
+            <FiChevronDown />
+          </div>
+
+          <button className="gd-archived">Show archived students</button>
+
+          <button
+            className="gd-fab"
+            title="Download"
+            style={{
+              border: "2px solid #21a55a",
+              color: "#21a55a",
+            }}
+          >
+            <FiDownloadCloud />
+          </button>
+        </div>
       </div>
 
       <div className="gd-tabs">
@@ -470,7 +496,31 @@ function GroupDetails({ group, onBack }) {
 
       <div className="gd-panel">
         <div className="gd-panel-bar" />
-        <div className="gd-panel-card">Course has not started yet</div>
+        <div className="gd-panel-card">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <span>Course has not started yet</span>
+            <span
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: 6,
+                border: "2px solid var(--primary-color)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              title="Calendar"
+            >
+              <FiCalendar />
+            </span>
+          </div>
+        </div>
       </div>
 
       <div className="gd-note">
